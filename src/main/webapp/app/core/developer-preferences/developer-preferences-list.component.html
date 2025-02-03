@@ -1,0 +1,43 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@developerPreferences.list.headline">Developer Preferenceses</h1>
+    <div>
+        <a routerLink="/developerPreferencess/add" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2" i18n="@@developerPreferences.list.createNew">Create new Developer Preferences</a>
+    </div>
+</div>
+@if (!developerPreferenceses || developerPreferenceses.length === 0) {
+<div i18n="@@developerPreferences.list.empty">No Developer Preferenceses could be found.</div>
+} @else {
+<div class="overflow-x-auto">
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.id.label">Id</th>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.appFormat.label">App Format</th>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.packageStrategy.label">Package Strategy</th>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.enableOpenAPI.label">Enable OpenAPI</th>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.useDockerCompose.label">Use Docker Compose</th>
+                <th scope="col" class="text-left p-2" i18n="@@developerPreferences.javaVersion.label">Java Version</th>
+                <th><!-- --></th>
+            </tr>
+        </thead>
+        <tbody class="border-t-2 border-black">
+            @for (developerPreferences of developerPreferenceses; track developerPreferences.id) {
+            <tr class="odd:bg-gray-100">
+                <td class="p-2">{{ developerPreferences.id }}</td>
+                <td class="p-2">{{ developerPreferences.appFormat }}</td>
+                <td class="p-2">{{ developerPreferences.packageStrategy }}</td>
+                <td class="p-2">{{ developerPreferences.enableOpenAPI }}</td>
+                <td class="p-2">{{ developerPreferences.useDockerCompose }}</td>
+                <td class="p-2">{{ developerPreferences.javaVersion }}</td>
+                <td class="p-2">
+                    <div class="float-right whitespace-nowrap">
+                        <a [routerLink]="['/developerPreferencess/edit', developerPreferences.id]" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@developerPreferences.list.edit">Edit</a>
+                        <button type="button" (click)="confirmDelete(developerPreferences.id!)" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@developerPreferences.list.delete">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}

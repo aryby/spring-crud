@@ -1,0 +1,16 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@developerPreferences.edit.headline">Edit Developer Preferences</h1>
+    <div>
+        <a routerLink="/developerPreferencess" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@developerPreferences.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@developerPreferences.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="appFormat" i18n-label="@@developerPreferences.appFormat.label" label="App Format" />
+    <app-input-row [group]="editForm" field="packageStrategy" i18n-label="@@developerPreferences.packageStrategy.label" label="Package Strategy" />
+    <app-input-row [group]="editForm" field="enableOpenAPI" rowType="checkbox" i18n-label="@@developerPreferences.enableOpenAPI.label" label="Enable OpenAPI" />
+    <app-input-row [group]="editForm" field="useDockerCompose" rowType="checkbox" i18n-label="@@developerPreferences.useDockerCompose.label" label="Use Docker Compose" />
+    <app-input-row [group]="editForm" field="javaVersion" i18n-label="@@developerPreferences.javaVersion.label" label="Java Version" />
+    <app-input-row [group]="editForm" field="furtherDependencies" rowType="textarea" i18n-label="@@developerPreferences.furtherDependencies.label" label="Further Dependencies" />
+    <input type="submit" i18n-value="@@developerPreferences.edit.headline" value="Edit Developer Preferences" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+</form>

@@ -1,0 +1,15 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@generalSettings.edit.headline">Edit General Settings</h1>
+    <div>
+        <a routerLink="/generalSettingss" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@generalSettings.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@generalSettings.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="projectName" i18n-label="@@generalSettings.projectName.label" label="Project Name" />
+    <app-input-row [group]="editForm" field="buildType" i18n-label="@@generalSettings.buildType.label" label="Build Type" />
+    <app-input-row [group]="editForm" field="language" i18n-label="@@generalSettings.language.label" label="Language" />
+    <app-input-row [group]="editForm" field="enableLombok" rowType="checkbox" i18n-label="@@generalSettings.enableLombok.label" label="Enable Lombok" />
+    <app-input-row [group]="editForm" field="frontendType" i18n-label="@@generalSettings.frontendType.label" label="Frontend Type" />
+    <input type="submit" i18n-value="@@generalSettings.edit.headline" value="Edit General Settings" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+</form>

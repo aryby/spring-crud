@@ -1,0 +1,15 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@customTableAttributes.edit.headline">Edit Custom Table Attributes</h1>
+    <div>
+        <a routerLink="/customTableAttributess" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@customTableAttributes.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@customTableAttributes.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="nameTypeModifier" i18n-label="@@customTableAttributes.nameTypeModifier.label" label="Name Type Modifier" />
+    <app-input-row [group]="editForm" field="nameAttribute" i18n-label="@@customTableAttributes.nameAttribute.label" label="Name Attribute" />
+    <app-input-row [group]="editForm" field="sizeJpaAttributes" rowType="textarea" i18n-label="@@customTableAttributes.sizeJpaAttributes.label" label="Size Jpa Attributes" />
+    <app-input-row [group]="editForm" field="customJoins" rowType="textarea" i18n-label="@@customTableAttributes.customJoins.label" label="Custom Joins" />
+    <app-input-row [group]="editForm" field="customRelations" rowType="textarea" i18n-label="@@customTableAttributes.customRelations.label" label="Custom Relations" />
+    <input type="submit" i18n-value="@@customTableAttributes.edit.headline" value="Edit Custom Table Attributes" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+</form>

@@ -1,0 +1,40 @@
+<header class="bg-gray-50">
+    <div class="container mx-auto px-4 md:px-6">
+        <nav class="flex flex-wrap items-center justify-between py-2">
+            <a routerLink="/" class="flex py-1.5 mr-4">
+                <img ngSrc="logo.png" i18n-alt="@@app.title" alt="SpringBootCrud" width="30" height="30" class="inline-block">
+                <span class="text-xl pl-3" i18n="@@app.title">SpringBootCrud</span>
+            </a>
+            <button type="button" class="js-dropdown md:hidden border rounded" data-dropdown-keepopen="true"
+                    i18n-aria-label="@@navigation.toggle" aria-label="Toggle navigation" aria-controls="navbarToggle" aria-expanded="false">
+                <div class="space-y-1.5 my-2.5 mx-4">
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                </div>
+            </button>
+            <div class="hidden md:block flex grow md:grow-0 justify-end basis-full md:basis-auto pt-3 md:pt-1 pb-1" id="navbarToggle">
+                <ul class="flex">
+                    <li>
+                        <a routerLink="/" class="block text-gray-500 p-2" i18n="@@navigation.home">Home</a>
+                    </li>
+                    <li class="relative">
+                        <a class="js-dropdown block text-gray-500 p-2" href="#" id="navbarEntitiesLink" role="button"
+                                aria-expanded="false">
+                            <span i18n="@@navigation.entities">Entities</span>
+                            <span class="text-[9px] align-[3px] pl-0.5">&#9660;</span>
+                        </a>
+                        <ul class="hidden block absolute right-0 bg-white border border-gray-300 rounded min-w-[10rem] py-2" aria-labelledby="navbarEntitiesLink">
+                            <li><a routerLink="/customTables" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@customTable.list.headline">Custom Tables</a></li>
+                            <li><a routerLink="/customTableAttributess" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@customTableAttributes.list.headline">Custom Table Attributeses</a></li>
+                            <li><a routerLink="/customMethods" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@customMethod.list.headline">Custom Methods</a></li>
+                            <li><a routerLink="/projectSettingss" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@projectSettings.list.headline">Project Settingses</a></li>
+                            <li><a routerLink="/generalSettingss" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@generalSettings.list.headline">General Settingses</a></li>
+                            <li><a routerLink="/databaseSettingss" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@databaseSettings.list.headline">Database Settingses</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

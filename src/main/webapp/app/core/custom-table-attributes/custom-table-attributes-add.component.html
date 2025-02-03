@@ -1,0 +1,26 @@
+
+<div class="border-blue-800 border-solid border-2 p-2 m-2">
+    <p class="pb-2">Add new variable</p>
+
+    <ul>
+        <li *ngFor="let item of customTableAttributes">
+            {{item.nameTypeModifier}} - {{item.nameAttribute}}
+        </li>
+    </ul>
+    <form class="grid grid-cols-2 w-full">
+       <!-- <app-input-row [group]="addForm" field="nameTypeModifier" rowType="select" [options]="nameTypeModifiersValues" i18n-label="@@customTableAttributes.nameTypeModifier.label" label="Name Type Modifier" />
+        <app-input-row [group]="addForm" field="nameAttribute" i18n-label="@@customTableAttributes.nameAttribute.label" label="Name Attribute" />
+        -->
+
+        <input type="text" name="nameTypeModifier" [(ngModel)]="customTableAttributesDTO.nameTypeModifier">
+        <input type="text" name="nameAttribute" [(ngModel)]="customTableAttributesDTO.nameAttribute">
+        <!--
+             <div class="grid grid-cols-3">
+             <app-input-row [group]="addForm" field="sizeJpaAttributes" rowType="text" i18n-label="@@customTableAttributes.sizeJpaAttributes.label" label="Size Jpa Attributes" />
+             <app-input-row [group]="addForm" field="customJoins" rowType="text" i18n-label="@@customTableAttributes.customJoins.label" label="Custom Joins" />
+             <app-input-row [group]="addForm" field="customRelations" rowType="text" i18n-label="@@customTableAttributes.customRelations.label" label="Custom Relations" />
+
+         </div>-->
+        <input (click)="handleSubmit()" i18n-value="@@customTableAttributes.add.headline" value="Add Custom Table Attributes" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+    </form>
+</div>

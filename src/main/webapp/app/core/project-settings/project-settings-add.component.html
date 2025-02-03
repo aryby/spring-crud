@@ -1,0 +1,12 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@projectSettings.add.headline">Add Project Settings</h1>
+    <div>
+        <a routerLink="/projectSettingss" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@projectSettings.add.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="addForm" field="generalSettings" rowType="select" [options]="generalSettingsValues" i18n-label="@@projectSettings.generalSettings.label" label="General Settings" />
+    <app-input-row [group]="addForm" field="databaseSettings" rowType="select" [options]="databaseSettingsValues" i18n-label="@@projectSettings.databaseSettings.label" label="Database Settings" />
+    <app-input-row [group]="addForm" field="developerPreferences" rowType="select" [options]="developerPreferencesValues" i18n-label="@@projectSettings.developerPreferences.label" label="Developer Preferences" />
+    <input type="submit" i18n-value="@@projectSettings.add.headline" value="Add Project Settings" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+</form>

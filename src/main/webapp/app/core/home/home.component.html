@@ -1,0 +1,159 @@
+<div class="p-4 bg-white rounded-lg shadow-md">
+    <form>
+        <!-- Project Settings -->
+        <section>
+            <h2 class="text-lg font-semibold mb-3">Project Settings</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="projectGroup" class="block text-sm font-medium text-gray-700">Project group</label>
+                    <input type="text" id="projectGroup" [(ngModel)]="generalSettingsDTO.projectName" name="projectGroup" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="projectName" class="block text-sm font-medium text-gray-700">Project name</label>
+                    <input type="text" id="projectName" [(ngModel)]="generalSettingsDTO.projectName" name="projectName" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Build type</label>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="buildType" [(ngModel)]="generalSettingsDTO.buildType" value="Gradle" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Gradle</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="buildType" [(ngModel)]="generalSettingsDTO.buildType" value="Maven" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Maven</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Language</label>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="language" [(ngModel)]="generalSettingsDTO.language" value="Java" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Java</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="language" [(ngModel)]="generalSettingsDTO.language" value="Kotlin" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Kotlin</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="enableLombok" [(ngModel)]="generalSettingsDTO.enableLombok" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2">Enable Lombok</span>
+                    </label>
+                </div>
+                <div>
+                    <label for="frontendType" class="block text-sm font-medium text-gray-700">Frontend</label>
+                    <select id="frontendType" [(ngModel)]="generalSettingsDTO.frontendType" name="frontendType" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="Angular + Tailwind CSS">Angular + Tailwind CSS</option>
+                        <option value="React + Bootstrap">React + Bootstrap</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-6">
+
+        <!-- Database Settings -->
+        <section>
+            <h2 class="text-lg font-semibold mb-3">Database Settings</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="database" class="block text-sm font-medium text-gray-700">Database</label>
+                    <select id="database" [(ngModel)]="databaseSettingDto.databaseProvider" name="databaseProvider" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="MySQL">MySQL</option>
+                        <option value="PostgreSQL">PostgreSQL</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="addTimestamps" [(ngModel)]="databaseSettingDto.addTimestamps" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2">Add dateCreated/lastUpdated to entities</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-6">
+
+        <!-- Developer Preferences -->
+        <section>
+            <h2 class="text-lg font-semibold mb-3">Developer Preferences</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Application Format</label>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="appFormat" [(ngModel)]="developerPreferencesDto.appFormat" value="YAML" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">YAML</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="appFormat" [(ngModel)]="developerPreferencesDto.appFormat" value="Properties" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Properties</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Packages</label>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="packageStrategy" [(ngModel)]="developerPreferencesDto.packageStrategy" value="Technical" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Technical</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="packageStrategy" [(ngModel)]="developerPreferencesDto.packageStrategy" value="Domain Driven" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Domain Driven</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="packageStrategy" [(ngModel)]="developerPreferencesDto.packageStrategy" value="Mixed" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">Mixed</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="enableOpenAPI" [(ngModel)]="developerPreferencesDto.enableOpenAPI" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2">Enable OpenAPI/Swagger UI</span>
+                    </label>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="useDockerCompose" [(ngModel)]="developerPreferencesDto.useDockerCompose" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2">Use Docker compose for development</span>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Java Version</label>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="javaVersion" [(ngModel)]="developerPreferencesDto.javaVersion" value="17" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">17</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="javaVersion" [(ngModel)]="developerPreferencesDto.javaVersion" value="21" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2">21</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-6">
+
+
+        <!-- Further Dependencies -->
+        <section>
+            <h2 class="text-lg font-semibold mb-3">Further Dependencies</h2>
+            <div>
+                <label for="dependencies" class="block text-sm font-medium text-gray-700">Add dependencies</label>
+                <input type="text" id="dependencies" name="furtherDependencies" [(ngModel)]="developerPreferencesDto.furtherDependencies" placeholder="Type to filter, e.g., starter, mail..." class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+        </section>
+
+        <div class="mt-6">
+            <button (click)="sendProject()" class="w-full px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Setup Entities</button>
+        </div>
+    </form>
+</div>
