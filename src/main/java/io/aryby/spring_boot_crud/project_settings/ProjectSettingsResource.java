@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("*")
 @RequestMapping(value = "/api/projectSettings", produces = MediaType.APPLICATION_JSON_VALUE)
-public class projectSettingResource {
+public class ProjectSettingsResource {
 
-    private final projectSettingService projectSettingService;
+    private final ProjectSettingService projectSettingService;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
     private final DeveloperPreferencesRepository developerPreferencesRepository;
 
-    public projectSettingResource(final projectSettingService projectSettingService,
+    public ProjectSettingsResource(final ProjectSettingService projectSettingService,
             final GeneralSettingsRepository generalSettingsRepository,
             final DatabaseSettingsRepository databaseSettingsRepository,
             final DeveloperPreferencesRepository developerPreferencesRepository) {
@@ -41,34 +41,40 @@ public class projectSettingResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<projectSettingDTO>> getAllprojectSettings() {
+    public ResponseEntity<List<ProjectSettingsDTO>> getAllProjectSettings() {
         return ResponseEntity.ok(projectSettingService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<projectSettingDTO> getprojectSetting(
+    public ResponseEntity<ProjectSettingsDTO> getProjectSetting(
             @PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(projectSettingService.get(id));
     }
 
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<ProjectSettingsDTO> getProjectSettingBySlug(
+        @PathVariable(name = "slug") final String slug) {
+        return ResponseEntity.ok(projectSettingService.getBySlug(slug));
+    }
+
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createprojectSetting(
-            @RequestBody @Valid final projectSettingDTO projectSettingDTO) {
-        final Long createdId = projectSettingService.create(projectSettingDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+    public ResponseEntity<ProjectSettings> createProjectSetting(
+            @RequestBody @Valid final ProjectSettingsDTO projectSettingDTO) {
+        final ProjectSettings created = projectSettingService.create(projectSettingDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateprojectSetting(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final projectSettingDTO projectSettingDTO) {
+    public ResponseEntity<Long> updateProjectSetting(@PathVariable(name = "id") final Long id,
+            @RequestBody @Valid final ProjectSettingsDTO projectSettingDTO) {
         projectSettingService.update(id, projectSettingDTO);
         return ResponseEntity.ok(id);
     }
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteprojectSetting(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Void> deleteProjectSetting(@PathVariable(name = "id") final Long id) {
 
         projectSettingService.delete(id);
         return ResponseEntity.noContent().build();

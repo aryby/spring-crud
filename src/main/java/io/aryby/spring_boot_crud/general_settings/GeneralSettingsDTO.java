@@ -1,13 +1,14 @@
 package io.aryby.spring_boot_crud.general_settings;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
+@ToString
 public class GeneralSettingsDTO {
 
     private Long id;

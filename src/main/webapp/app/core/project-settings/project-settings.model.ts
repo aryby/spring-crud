@@ -5,6 +5,7 @@ export class projectSettingDTO {
   }
 
   id?: number|null;
+  slug?: string|null;
   generalSettings?: number|null;
   databaseSettings?: number|null;
   developerPreferences?: number|null;

@@ -4,8 +4,8 @@ import io.aryby.spring_boot_crud.custom_method.CustomMethod;
 import io.aryby.spring_boot_crud.custom_method.CustomMethodRepository;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesRepository;
-import io.aryby.spring_boot_crud.project_settings.projectSetting;
-import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -20,12 +20,12 @@ public class CustomTableService {
 
     private final CustomTableRepository customTableRepository;
     private final CustomTableAttributesRepository customTableAttributesRepository;
-    private final projectSettingRepository projectSettingRepository;
+    private final ProjectSettingsRepository projectSettingRepository;
     private final CustomMethodRepository customMethodRepository;
 
     public CustomTableService(final CustomTableRepository customTableRepository,
             final CustomTableAttributesRepository customTableAttributesRepository,
-            final projectSettingRepository projectSettingRepository,
+            final ProjectSettingsRepository projectSettingRepository,
             final CustomMethodRepository customMethodRepository) {
         this.customTableRepository = customTableRepository;
         this.customTableAttributesRepository = customTableAttributesRepository;
@@ -81,9 +81,9 @@ public class CustomTableService {
             final CustomTable customTable) {
         customTable.setName(customTableDTO.getName());
 
-        final projectSetting projectSetting = customTableDTO.getprojectSetting() == null ? null : projectSettingRepository.findById(customTableDTO.getprojectSetting())
+        final ProjectSettings projectSetting = customTableDTO.getProjectSetting() == null ? null : projectSettingRepository.findById(customTableDTO.getProjectSetting())
                 .orElseThrow(() -> new NotFoundException("projectSetting not found"));
-        customTable.setprojectSetting(projectSetting.getId());
+        customTable.setProjectSetting(projectSetting.getId());
         return customTable;
     }
 

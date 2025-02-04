@@ -64,7 +64,7 @@ export class projectSettingAddComponent implements OnInit {
       return;
     }
     const data = new projectSettingDTO(this.addForm.value);
-    this.projectSettingService.createprojectSetting(data)
+    this.projectSettingService.createProjectSetting(data)
         .subscribe({
           next: () => this.router.navigate(['/projectSettings'], {
             state: {

@@ -1,8 +1,7 @@
 package io.aryby.spring_boot_crud.project_settings;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import java.util.Optional;
 
 
 public interface ProjectSettingsRepository extends JpaRepository<ProjectSettings, Long> {
@@ -10,10 +9,6 @@ public interface ProjectSettingsRepository extends JpaRepository<ProjectSettings
         ProjectSettings findFirstByGeneralSettings(Long generalSettings);
         ProjectSettings findFirstByDeveloperPreferences(Long developerPreferences);
         ProjectSettings findFirstByDatabaseSettings(Long databaseSettings);
-    boolean existsByGeneralSettings(Long id);
-
-    boolean existsByDatabaseSettings(Long id);
-
-    boolean existsByDeveloperPreferences(Long id);
+        Optional<ProjectSettings> findFirstBySlug(String slug);
 
 }

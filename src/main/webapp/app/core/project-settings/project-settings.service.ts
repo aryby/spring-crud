@@ -18,14 +18,20 @@ export class projectSettingService {
     return this.http.get<projectSettingDTO[]>(this.resourcePath);
   }
 
-  getprojectSetting(id: number) {
+  getProjectSetting(id: number) {
     return this.http.get<projectSettingDTO>(this.resourcePath + '/' + id);
   }
+
+  getProjectSettingBySlug(slug: string) {
+    return this.http.get<projectSettingDTO>(this.resourcePath + '/slug/' + slug);
+  }
+
+
   download(id: number) {
     return this.http.get(this.resourcePath + '/download/' + id, { responseType:'blob' });
   }
 
-  createprojectSetting(projectSettingDTO: projectSettingDTO) {
+  createProjectSetting(projectSettingDTO: projectSettingDTO) {
     return this.http.post<number>(this.resourcePath, projectSettingDTO);
   }
 

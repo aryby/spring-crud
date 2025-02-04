@@ -10,6 +10,8 @@ public class ProjectSettingsDTO {
 
     private Long id;
 
+    private String slug;
+
     private Long generalSettings;
 
     private Long databaseSettings;

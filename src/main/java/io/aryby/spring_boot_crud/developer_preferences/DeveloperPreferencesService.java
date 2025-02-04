@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.developer_preferences;
 
-import io.aryby.spring_boot_crud.project_settings.projectSetting;
-import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class DeveloperPreferencesService {
 
     private final DeveloperPreferencesRepository developerPreferencesRepository;
-    private final projectSettingRepository projectSettingRepository;
+    private final ProjectSettingsRepository projectSettingRepository;
 
     public DeveloperPreferencesService(
             final DeveloperPreferencesRepository developerPreferencesRepository,
-            final projectSettingRepository projectSettingRepository) {
+            final ProjectSettingsRepository projectSettingRepository) {
         this.developerPreferencesRepository = developerPreferencesRepository;
         this.projectSettingRepository = projectSettingRepository;
     }
@@ -79,7 +79,7 @@ public class DeveloperPreferencesService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final DeveloperPreferences developerPreferences = developerPreferencesRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final projectSetting developerPreferencesprojectSetting = projectSettingRepository.findFirstByDeveloperPreferences(developerPreferences.getId());
+        final ProjectSettings developerPreferencesprojectSetting = projectSettingRepository.findFirstByDeveloperPreferences(developerPreferences.getId());
         if (developerPreferencesprojectSetting != null) {
             referencedWarning.setKey("developerPreferences.projectSetting.developerPreferences.referenced");
             referencedWarning.addParam(developerPreferencesprojectSetting.getId());

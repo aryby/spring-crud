@@ -37,6 +37,9 @@ public class ProjectSettings {
     private Long id;
 
 
+    @Column(nullable = false, updatable = false)
+    private String slug;
+
     @JoinColumn(name = "general_settings_id", unique = true)
     private Long generalSettings;
 

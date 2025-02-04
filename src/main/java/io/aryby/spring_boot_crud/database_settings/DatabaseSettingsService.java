@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.database_settings;
 
-import io.aryby.spring_boot_crud.project_settings.projectSetting;
-import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 public class DatabaseSettingsService {
 
     private final DatabaseSettingsRepository databaseSettingsRepository;
-    private final projectSettingRepository projectSettingRepository;
+    private final ProjectSettingsRepository projectSettingRepository;
 
     public DatabaseSettingsService(final DatabaseSettingsRepository databaseSettingsRepository,
-            final projectSettingRepository projectSettingRepository) {
+            final ProjectSettingsRepository projectSettingRepository) {
         this.databaseSettingsRepository = databaseSettingsRepository;
         this.projectSettingRepository = projectSettingRepository;
     }
@@ -70,7 +70,7 @@ public class DatabaseSettingsService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final DatabaseSettings databaseSettings = databaseSettingsRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final projectSetting databaseSettingsprojectSetting = projectSettingRepository.findFirstByDatabaseSettings(databaseSettings.getId());
+        final ProjectSettings databaseSettingsprojectSetting = projectSettingRepository.findFirstByDatabaseSettings(databaseSettings.getId());
         if (databaseSettingsprojectSetting != null) {
             referencedWarning.setKey("databaseSettings.projectSetting.databaseSettings.referenced");
             referencedWarning.addParam(databaseSettingsprojectSetting.getId());

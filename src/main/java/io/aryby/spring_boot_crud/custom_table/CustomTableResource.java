@@ -1,10 +1,9 @@
 package io.aryby.spring_boot_crud.custom_table;
 
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesDTO;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesRepository;
-import io.aryby.spring_boot_crud.project_settings.projectSetting;
-import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
+import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
 import io.aryby.spring_boot_crud.util.ReferencedException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
@@ -26,11 +25,11 @@ public class CustomTableResource {
 
     private final CustomTableService customTableService;
     private final CustomTableAttributesRepository customTableAttributesRepository;
-    private final projectSettingRepository projectSettingRepository;
+    private final ProjectSettingsRepository projectSettingRepository;
 
     public CustomTableResource(final CustomTableService customTableService,
             final CustomTableAttributesRepository customTableAttributesRepository,
-            final projectSettingRepository projectSettingRepository) {
+            final ProjectSettingsRepository projectSettingRepository) {
         this.customTableService = customTableService;
         this.customTableAttributesRepository = customTableAttributesRepository;
         this.projectSettingRepository = projectSettingRepository;
@@ -92,7 +91,7 @@ public class CustomTableResource {
     public ResponseEntity<Map<Long, Long>> getprojectSettingValues() {
         return ResponseEntity.ok(projectSettingRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(projectSetting::getId, projectSetting::getId)));
+                .collect(CustomCollectors.toSortedMap(ProjectSettings::getId, ProjectSettings::getId)));
     }
 
 }

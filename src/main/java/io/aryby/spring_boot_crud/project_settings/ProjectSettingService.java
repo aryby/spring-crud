@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import io.aryby.spring_boot_crud.util.UuidGenerator;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -54,16 +55,24 @@ public class ProjectSettingService {
             .toList();
     }
 
+    public ProjectSettingsDTO getBySlug(final String slug) {
+        return projectSettingRepository.findFirstBySlug(slug)
+            .map(projectSetting -> mapToDTO(projectSetting, new ProjectSettingsDTO()))
+            .orElseThrow(NotFoundException::new);
+    }
+
     public ProjectSettingsDTO get(final Long id) {
         return projectSettingRepository.findById(id)
             .map(projectSetting -> mapToDTO(projectSetting, new ProjectSettingsDTO()))
             .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final ProjectSettingsDTO projectSettingDTO) {
+    public ProjectSettings create(final ProjectSettingsDTO projectSettingDTO) {
         final ProjectSettings projectSetting = new ProjectSettings();
+        projectSettingDTO.setSlug(UuidGenerator.generateUID());
+
         mapToEntity(projectSettingDTO, projectSetting);
-        return projectSettingRepository.save(projectSetting).getId();
+        return projectSettingRepository.save(projectSetting);
     }
 
     public void update(final Long id, final ProjectSettingsDTO projectSettingDTO) {
@@ -80,6 +89,7 @@ public class ProjectSettingService {
     private ProjectSettingsDTO mapToDTO(final ProjectSettings projectSetting,
                                         final ProjectSettingsDTO projectSettingDTO) {
         projectSettingDTO.setId(projectSetting.getId());
+        projectSettingDTO.setSlug(projectSetting.getSlug());
         projectSettingDTO.setGeneralSettings(projectSetting.getGeneralSettings() == null ? null : projectSetting.getGeneralSettings());
         projectSettingDTO.setDatabaseSettings(projectSetting.getDatabaseSettings() == null ? null : projectSetting.getDatabaseSettings());
         projectSettingDTO.setDeveloperPreferences(projectSetting.getDeveloperPreferences() == null ? null : projectSetting.getDeveloperPreferences());
@@ -88,6 +98,8 @@ public class ProjectSettingService {
 
     private ProjectSettings mapToEntity(final ProjectSettingsDTO projectSettingDTO,
                                         final ProjectSettings projectSetting) {
+        projectSetting.setId(projectSettingDTO.getId());
+        projectSetting.setSlug(projectSettingDTO.getSlug());
         final GeneralSettings generalSettings = projectSettingDTO.getGeneralSettings() == null ? null : generalSettingsRepository.findById(projectSettingDTO.getGeneralSettings())
             .orElseThrow(() -> new NotFoundException("generalSettings not found"));
         projectSetting.setGeneralSettings(generalSettings.getId());
@@ -120,7 +132,7 @@ public class ProjectSettingService {
         String srcMainJava = "src/main/java/" + basePackage + "/";
         String srcMainResources = "src/main/resources/";
 
-        String appColnt=generateSpringBootMain(projectId);
+        String appColnt=generateSpringBootMain(projectId); // main class spring boot
         ZipEntry zipEntry1 = new ZipEntry(srcMainJava + "StarterApp.java");
         zipOut.putNextEntry(zipEntry1);
         zipOut.write(appColnt.getBytes());
@@ -314,7 +326,6 @@ public class ProjectSettingService {
     private String generateSpringBootMain(Long projectId) {
         ProjectSettings projectSetting = projectSettingRepository.findById(projectId).get();
         GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings()).get();
-
 
         StringBuilder sb = new StringBuilder();
 

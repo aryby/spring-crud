@@ -5,6 +5,9 @@ import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "/api/generalSettingss", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/generalSettings", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GeneralSettingsResource {
 
     private final GeneralSettingsService generalSettingsService;
+    private final Logger logger = LoggerFactory.getLogger(GeneralSettingsResource.class);
 
     public GeneralSettingsResource(final GeneralSettingsService generalSettingsService) {
         this.generalSettingsService = generalSettingsService;
@@ -37,6 +41,7 @@ public class GeneralSettingsResource {
     @ApiResponse(responseCode = "201")
     public ResponseEntity<Long> createGeneralSettings(
             @RequestBody @Valid final GeneralSettingsDTO generalSettingsDTO) {
+        logger.info("Recieved request GeneralSettingsDTO, "+generalSettingsDTO.toString());
         final Long createdId = generalSettingsService.create(generalSettingsDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
