@@ -190,29 +190,31 @@ public class ProjectSettingsService {
             "@Getter\n" +
             "@Setter\n");
         sb.append("public class ").append(table.getName()).append(" {\n");
-
+        sb.append("\n" +
+            "    @Id\n" +
+            "    @Column(nullable = false, updatable = false)\n" +
+            "    @GeneratedValue(strategy = GenerationType.IDENTITY)\n" +
+            "    private Long id;" +
+            "\n");
         for (CustomTableAttributesDTO attr : customTableAttributesService.findAllByTableId(table.getId())) {
-            sb.append("\n" +
-                "    @Id\n" +
-                "    @Column(nullable = false, updatable = false)\n" +
-                "    @GeneratedValue(strategy = GenerationType.IDENTITY)\n" +
-                "    private Long id;" +
-                "\n");
+
                 sb.append("    private  ")
                 .append(attr.getNameTypeModifier())
                 .append(" ")
                 .append(attr.getNameAttribute())
                 .append(";\n");
 
-                sb.append("\n" +
-                    "    @CreatedDate\n" +
-                    "    @Column(nullable = false, updatable = false)\n" +
-                    "    private OffsetDateTime dateCreated;\n" +
-                    "\n" +
-                    "    @LastModifiedDate\n" +
-                    "    @Column(nullable = false)\n" +
-                    "    private OffsetDateTime lastUpdated;\n");
+
         }
+
+        sb.append("\n" +
+            "    @CreatedDate\n" +
+            "    @Column(nullable = false, updatable = false)\n" +
+            "    private OffsetDateTime dateCreated;\n" +
+            "\n" +
+            "    @LastModifiedDate\n" +
+            "    @Column(nullable = false)\n" +
+            "    private OffsetDateTime lastUpdated;\n");
         sb.append("}");
         return sb.toString();
     }
