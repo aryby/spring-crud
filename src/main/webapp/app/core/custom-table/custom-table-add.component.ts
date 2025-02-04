@@ -8,7 +8,7 @@ import {ErrorHandler} from 'app/common/error-handler.injectable';
 import {MyStorageService} from "../../services/my-storage";
 import {environment} from "../../../environments/environment";
 import {DeveloperPreferencesDTO} from "../developer-preferences/developer-preferences.model";
-import {ProjectSettingsDTO} from "../project-settings/project-settings.model";
+import {projectSettingDTO} from "../project-settings/project-settings.model";
 import {CustomTableAttributesDTO} from "../custom-table-attributes/custom-table-attributes.model";
 
 
@@ -25,7 +25,7 @@ export class CustomTableAddComponent implements OnInit {
   errorHandler = inject(ErrorHandler);
 
   costumTableDTO: CustomTableDTO ={};
-  projectSettings: ProjectSettingsDTO ={};
+  projectSetting: projectSettingDTO ={};
   developerPreferencesTableDTO: DeveloperPreferencesDTO ={};
 
 
@@ -34,7 +34,7 @@ export class CustomTableAddComponent implements OnInit {
   addForm = new FormGroup({
     name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
     customTableAttributes: new FormControl(null),
-    projectSettings: new FormControl(null)
+    projectSetting: new FormControl(null)
   }, {updateOn: 'submit'});
   customTableAttributes: CustomTableAttributesDTO[]=[];
 
@@ -51,7 +51,7 @@ export class CustomTableAddComponent implements OnInit {
     if (this._localStore.getEntityToStorage(environment.entityTable)){
       this.costumTableDTO = this._localStore.getEntityToStorage(environment.entityTable);
     }
-    this.projectSettings=this._localStore.getEntityToStorage(environment.entityProjectSetting);
+    this.projectSetting=this._localStore.getEntityToStorage(environment.entityProjectSetting);
     console.log(this.developerPreferencesTableDTO);
     console.log(this.costumTableDTO);
 
@@ -74,7 +74,7 @@ export class CustomTableAddComponent implements OnInit {
   handleSubmit() {
     window.scrollTo(0, 0);
     this.addForm.markAllAsTouched();
-    this.costumTableDTO.projectSettings = this.projectSettings.id;
+    this.costumTableDTO.projectSetting = this.projectSetting.id;
     this.customTableService.createCustomTable(this.costumTableDTO)
       .subscribe((value:number) => {
           this.costumTableDTO.id=value;

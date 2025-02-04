@@ -81,8 +81,8 @@ export class CustomTableService {
   /**
    * Get project settings as a mapped object
    */
-  getProjectSettingsValues() {
-    return this.http.get<Record<string, number>>(`${this.resourcePath}/projectSettingsValues`).pipe(
+  getprojectSettingValues() {
+    return this.http.get<Record<string, number>>(`${this.resourcePath}/projectSettingValues`).pipe(
       map(transformRecordToMap)
     );
   }

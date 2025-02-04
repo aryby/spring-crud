@@ -20,6 +20,6 @@ public class CustomTableDTO {
     @Size(max = 255)
     private String name;
     private List<CustomTableAttributes> customTablesAttributes;
-    private Long projectSettings;
+    private Long projectSetting;
 
 }

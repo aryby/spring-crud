@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ErrorHandler } from 'app/common/error-handler.injectable';
-import { ProjectSettingsService } from 'app/core/project-settings/project-settings.service';
-import { ProjectSettingsDTO } from 'app/core/project-settings/project-settings.model';
+import { projectSettingService } from 'app/core/project-settings/project-settings.service';
+import { projectSettingDTO } from 'app/core/project-settings/project-settings.model';
 import {MyStorageService} from "../../services/my-storage";
 import {environment} from "../../../environments/environment";
 
@@ -13,12 +13,12 @@ import {environment} from "../../../environments/environment";
   selector: 'app-project-settings-list',
   imports: [CommonModule, RouterLink],
   templateUrl: './project-settings-list.component.html'})
-export class ProjectSettingsListComponent implements OnInit, OnDestroy {
+export class projectSettingListComponent implements OnInit, OnDestroy {
 
-  projectSettingsService = inject(ProjectSettingsService);
+  projectSettingService = inject(projectSettingService);
   errorHandler = inject(ErrorHandler);
   router = inject(Router);
-  projectSettingses?: ProjectSettingsDTO[];
+  projectSettinges?: projectSettingDTO[];
   navigationSubscription?: Subscription;
 
   _myStorage = inject(MyStorageService);
@@ -26,8 +26,8 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
   getMessage(key: string, details?: any) {
     const messages: Record<string, string> = {
       confirm: $localize`:@@delete.confirm:Do you really want to delete this element? This cannot be undone.`,
-      deleted: $localize`:@@projectSettings.delete.success:Project Settings was removed successfully.`,
-      'projectSettings.customTable.projectSettings.referenced': $localize`:@@projectSettings.customTable.projectSettings.referenced:This entity is still referenced by Custom Table ${details?.id} via field Project Settings.`
+      deleted: $localize`:@@projectSetting.delete.success:Project Settings was removed successfully.`,
+      'projectSetting.customTable.projectSetting.referenced': $localize`:@@projectSetting.customTable.projectSetting.referenced:This entity is still referenced by Custom Table ${details?.id} via field Project Settings.`
     };
     return messages[key];
   }
@@ -46,18 +46,18 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.projectSettingsService.getAllProjectSettingses()
+    this.projectSettingService.getAllprojectSettinges()
         .subscribe({
-          next: (data) => this.projectSettingses = data,
+          next: (data) => this.projectSettinges = data,
           error: (error) => this.errorHandler.handleServerError(error.error)
         });
   }
 
   confirmDelete(id: number) {
     if (confirm(this.getMessage('confirm'))) {
-      this.projectSettingsService.deleteProjectSettings(id)
+      this.projectSettingService.deleteprojectSetting(id)
           .subscribe({
-            next: () => this.router.navigate(['/projectSettingss'], {
+            next: () => this.router.navigate(['/projectSettings'], {
               state: {
                 msgInfo: this.getMessage('deleted')
               }
@@ -65,7 +65,7 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
             error: (error) => {
               if (error.error?.code === 'REFERENCED') {
                 const messageParts = error.error.message.split(',');
-                this.router.navigate(['/projectSettingss'], {
+                this.router.navigate(['/projectSettings'], {
                   state: {
                     msgError: this.getMessage(messageParts[0], { id: messageParts[1] })
                   }
@@ -81,7 +81,7 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
 
   downloadZip() {
     let cusT = this._myStorage.getEntityToStorage(environment.entityProjectSetting);
-    this.projectSettingsService.download(cusT.id)
+    this.projectSettingService.download(cusT.id)
       .subscribe(blob => {
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(blob);

@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.database_settings;
 
-import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
-import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.project_settings.projectSetting;
+import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class DatabaseSettingsService {
 
     private final DatabaseSettingsRepository databaseSettingsRepository;
-    private final ProjectSettingsRepository projectSettingsRepository;
+    private final projectSettingRepository projectSettingRepository;
 
     public DatabaseSettingsService(final DatabaseSettingsRepository databaseSettingsRepository,
-            final ProjectSettingsRepository projectSettingsRepository) {
+            final projectSettingRepository projectSettingRepository) {
         this.databaseSettingsRepository = databaseSettingsRepository;
-        this.projectSettingsRepository = projectSettingsRepository;
+        this.projectSettingRepository = projectSettingRepository;
     }
 
     public List<DatabaseSettingsDTO> findAll() {
@@ -70,10 +70,10 @@ public class DatabaseSettingsService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final DatabaseSettings databaseSettings = databaseSettingsRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final ProjectSettings databaseSettingsProjectSettings = projectSettingsRepository.findFirstByDatabaseSettings(databaseSettings.getId());
-        if (databaseSettingsProjectSettings != null) {
-            referencedWarning.setKey("databaseSettings.projectSettings.databaseSettings.referenced");
-            referencedWarning.addParam(databaseSettingsProjectSettings.getId());
+        final projectSetting databaseSettingsprojectSetting = projectSettingRepository.findFirstByDatabaseSettings(databaseSettings.getId());
+        if (databaseSettingsprojectSetting != null) {
+            referencedWarning.setKey("databaseSettings.projectSetting.databaseSettings.referenced");
+            referencedWarning.addParam(databaseSettingsprojectSetting.getId());
             return referencedWarning;
         }
         return null;

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { InputRowComponent } from 'app/common/input-row/input-row.component';
-import { ProjectSettingsService } from 'app/core/project-settings/project-settings.service';
-import { ProjectSettingsDTO } from 'app/core/project-settings/project-settings.model';
+import { projectSettingService } from 'app/core/project-settings/project-settings.service';
+import { projectSettingDTO } from 'app/core/project-settings/project-settings.model';
 import { ErrorHandler } from 'app/common/error-handler.injectable';
 
 
@@ -13,9 +13,9 @@ import { ErrorHandler } from 'app/common/error-handler.injectable';
   imports: [CommonModule, RouterLink, ReactiveFormsModule, InputRowComponent],
   templateUrl: './project-settings-add.component.html'
 })
-export class ProjectSettingsAddComponent implements OnInit {
+export class projectSettingAddComponent implements OnInit {
 
-  projectSettingsService = inject(ProjectSettingsService);
+  projectSettingService = inject(projectSettingService);
   router = inject(Router);
   errorHandler = inject(ErrorHandler);
 
@@ -31,26 +31,26 @@ export class ProjectSettingsAddComponent implements OnInit {
 
   getMessage(key: string, details?: any) {
     const messages: Record<string, string> = {
-      created: $localize`:@@projectSettings.create.success:Project Settings was created successfully.`,
-      PROJECT_SETTINGS_GENERAL_SETTINGS_UNIQUE: $localize`:@@Exists.projectSettings.generalSettings:This General Settings is already referenced by another Project Settings.`,
-      PROJECT_SETTINGS_DATABASE_SETTINGS_UNIQUE: $localize`:@@Exists.projectSettings.databaseSettings:This Database Settings is already referenced by another Project Settings.`,
-      PROJECT_SETTINGS_DEVELOPER_PREFERENCES_UNIQUE: $localize`:@@Exists.projectSettings.developerPreferences:This Developer Preferences is already referenced by another Project Settings.`
+      created: $localize`:@@projectSetting.create.success:Project Settings was created successfully.`,
+      PROJECT_SETTINGS_GENERAL_SETTINGS_UNIQUE: $localize`:@@Exists.projectSetting.generalSettings:This General Settings is already referenced by another Project Settings.`,
+      PROJECT_SETTINGS_DATABASE_SETTINGS_UNIQUE: $localize`:@@Exists.projectSetting.databaseSettings:This Database Settings is already referenced by another Project Settings.`,
+      PROJECT_SETTINGS_DEVELOPER_PREFERENCES_UNIQUE: $localize`:@@Exists.projectSetting.developerPreferences:This Developer Preferences is already referenced by another Project Settings.`
     };
     return messages[key];
   }
 
   ngOnInit() {
-    this.projectSettingsService.getGeneralSettingsValues()
+    this.projectSettingService.getGeneralSettingsValues()
         .subscribe({
           next: (data) => this.generalSettingsValues = data,
           error: (error) => this.errorHandler.handleServerError(error.error)
         });
-    this.projectSettingsService.getDatabaseSettingsValues()
+    this.projectSettingService.getDatabaseSettingsValues()
         .subscribe({
           next: (data) => this.databaseSettingsValues = data,
           error: (error) => this.errorHandler.handleServerError(error.error)
         });
-    this.projectSettingsService.getDeveloperPreferencesValues()
+    this.projectSettingService.getDeveloperPreferencesValues()
         .subscribe({
           next: (data) => this.developerPreferencesValues = data,
           error: (error) => this.errorHandler.handleServerError(error.error)
@@ -63,10 +63,10 @@ export class ProjectSettingsAddComponent implements OnInit {
     if (!this.addForm.valid) {
       return;
     }
-    const data = new ProjectSettingsDTO(this.addForm.value);
-    this.projectSettingsService.createProjectSettings(data)
+    const data = new projectSettingDTO(this.addForm.value);
+    this.projectSettingService.createprojectSetting(data)
         .subscribe({
-          next: () => this.router.navigate(['/projectSettingss'], {
+          next: () => this.router.navigate(['/projectSettings'], {
             state: {
               msgSuccess: this.getMessage('created')
             }

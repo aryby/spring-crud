@@ -3,8 +3,8 @@ package io.aryby.spring_boot_crud.custom_table;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesDTO;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesRepository;
-import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
-import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.project_settings.projectSetting;
+import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
 import io.aryby.spring_boot_crud.util.ReferencedException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
@@ -26,14 +26,14 @@ public class CustomTableResource {
 
     private final CustomTableService customTableService;
     private final CustomTableAttributesRepository customTableAttributesRepository;
-    private final ProjectSettingsRepository projectSettingsRepository;
+    private final projectSettingRepository projectSettingRepository;
 
     public CustomTableResource(final CustomTableService customTableService,
             final CustomTableAttributesRepository customTableAttributesRepository,
-            final ProjectSettingsRepository projectSettingsRepository) {
+            final projectSettingRepository projectSettingRepository) {
         this.customTableService = customTableService;
         this.customTableAttributesRepository = customTableAttributesRepository;
-        this.projectSettingsRepository = projectSettingsRepository;
+        this.projectSettingRepository = projectSettingRepository;
     }
 
     @GetMapping
@@ -88,11 +88,11 @@ public class CustomTableResource {
                 .collect(CustomCollectors.toSortedMap(CustomTableAttributes::getId, CustomTableAttributes::getNameAttribute)));
     }
 
-    @GetMapping("/projectSettingsValues")
-    public ResponseEntity<Map<Long, Long>> getProjectSettingsValues() {
-        return ResponseEntity.ok(projectSettingsRepository.findAll(Sort.by("id"))
+    @GetMapping("/projectSettingValues")
+    public ResponseEntity<Map<Long, Long>> getprojectSettingValues() {
+        return ResponseEntity.ok(projectSettingRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(ProjectSettings::getId, ProjectSettings::getId)));
+                .collect(CustomCollectors.toSortedMap(projectSetting::getId, projectSetting::getId)));
     }
 
 }

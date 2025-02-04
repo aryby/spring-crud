@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.developer_preferences;
 
-import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
-import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.project_settings.projectSetting;
+import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 public class DeveloperPreferencesService {
 
     private final DeveloperPreferencesRepository developerPreferencesRepository;
-    private final ProjectSettingsRepository projectSettingsRepository;
+    private final projectSettingRepository projectSettingRepository;
 
     public DeveloperPreferencesService(
             final DeveloperPreferencesRepository developerPreferencesRepository,
-            final ProjectSettingsRepository projectSettingsRepository) {
+            final projectSettingRepository projectSettingRepository) {
         this.developerPreferencesRepository = developerPreferencesRepository;
-        this.projectSettingsRepository = projectSettingsRepository;
+        this.projectSettingRepository = projectSettingRepository;
     }
 
     public List<DeveloperPreferencesDTO> findAll() {
@@ -79,10 +79,10 @@ public class DeveloperPreferencesService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final DeveloperPreferences developerPreferences = developerPreferencesRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final ProjectSettings developerPreferencesProjectSettings = projectSettingsRepository.findFirstByDeveloperPreferences(developerPreferences.getId());
-        if (developerPreferencesProjectSettings != null) {
-            referencedWarning.setKey("developerPreferences.projectSettings.developerPreferences.referenced");
-            referencedWarning.addParam(developerPreferencesProjectSettings.getId());
+        final projectSetting developerPreferencesprojectSetting = projectSettingRepository.findFirstByDeveloperPreferences(developerPreferences.getId());
+        if (developerPreferencesprojectSetting != null) {
+            referencedWarning.setKey("developerPreferences.projectSetting.developerPreferences.referenced");
+            referencedWarning.addParam(developerPreferencesprojectSetting.getId());
             return referencedWarning;
         }
         return null;

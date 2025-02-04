@@ -23,7 +23,7 @@ export class DatabaseSettingsListComponent implements OnInit, OnDestroy {
     const messages: Record<string, string> = {
       confirm: $localize`:@@delete.confirm:Do you really want to delete this element? This cannot be undone.`,
       deleted: $localize`:@@databaseSettings.delete.success:Database Settings was removed successfully.`,
-      'databaseSettings.projectSettings.databaseSettings.referenced': $localize`:@@databaseSettings.projectSettings.databaseSettings.referenced:This entity is still referenced by Project Settings ${details?.id} via field Database Settings.`
+      'databaseSettings.projectSetting.databaseSettings.referenced': $localize`:@@databaseSettings.projectSetting.databaseSettings.referenced:This entity is still referenced by Project Settings ${details?.id} via field Database Settings.`
     };
     return messages[key];
   }

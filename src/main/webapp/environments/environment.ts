@@ -5,7 +5,7 @@ export const environment = {
   entityTable:'entityTable',
   entityAttributes:'entityAttributes',
   entityMethode:'entityMethode',
-  entityProjectSetting:'entityProjectSettings',
+  entityProjectSetting:'entityprojectSetting',
   entityGeneralSetting:'entityGeneralSettings',
   entityDatabaseSettings:'entityDatabaseSettings',
 

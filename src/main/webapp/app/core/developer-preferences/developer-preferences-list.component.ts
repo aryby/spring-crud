@@ -23,7 +23,7 @@ export class DeveloperPreferencesListComponent implements OnInit, OnDestroy {
     const messages: Record<string, string> = {
       confirm: $localize`:@@delete.confirm:Do you really want to delete this element? This cannot be undone.`,
       deleted: $localize`:@@developerPreferences.delete.success:Developer Preferences was removed successfully.`,
-      'developerPreferences.projectSettings.developerPreferences.referenced': $localize`:@@developerPreferences.projectSettings.developerPreferences.referenced:This entity is still referenced by Project Settings ${details?.id} via field Developer Preferences.`
+      'developerPreferences.projectSetting.developerPreferences.referenced': $localize`:@@developerPreferences.projectSetting.developerPreferences.referenced:This entity is still referenced by Project Settings ${details?.id} via field Developer Preferences.`
     };
     return messages[key];
   }

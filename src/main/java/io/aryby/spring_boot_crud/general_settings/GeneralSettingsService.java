@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.general_settings;
 
-import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
-import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.project_settings.projectSetting;
+import io.aryby.spring_boot_crud.project_settings.projectSettingRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class GeneralSettingsService {
 
     private final GeneralSettingsRepository generalSettingsRepository;
-    private final ProjectSettingsRepository projectSettingsRepository;
+    private final projectSettingRepository projectSettingRepository;
 
     public GeneralSettingsService(final GeneralSettingsRepository generalSettingsRepository,
-            final ProjectSettingsRepository projectSettingsRepository) {
+            final projectSettingRepository projectSettingRepository) {
         this.generalSettingsRepository = generalSettingsRepository;
-        this.projectSettingsRepository = projectSettingsRepository;
+        this.projectSettingRepository = projectSettingRepository;
     }
 
     public List<GeneralSettingsDTO> findAll() {
@@ -80,10 +80,10 @@ public class GeneralSettingsService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final GeneralSettings generalSettings = generalSettingsRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final ProjectSettings generalSettingsProjectSettings = projectSettingsRepository.findFirstByGeneralSettings(generalSettings.getId());
-        if (generalSettingsProjectSettings != null) {
-            referencedWarning.setKey("generalSettings.projectSettings.generalSettings.referenced");
-            referencedWarning.addParam(generalSettingsProjectSettings.getId());
+        final projectSetting generalSettingsprojectSetting = projectSettingRepository.findFirstByGeneralSettings(generalSettings.getId());
+        if (generalSettingsprojectSetting != null) {
+            referencedWarning.setKey("generalSettings.projectSetting.generalSettings.referenced");
+            referencedWarning.addParam(generalSettingsprojectSetting.getId());
             return referencedWarning;
         }
         return null;

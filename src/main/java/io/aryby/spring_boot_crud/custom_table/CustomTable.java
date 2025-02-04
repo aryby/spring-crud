@@ -31,7 +31,7 @@ public class CustomTable {
     @Column(nullable = false)
     private String name;
 
-    private Long projectSettings;
+    private Long projectSetting;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

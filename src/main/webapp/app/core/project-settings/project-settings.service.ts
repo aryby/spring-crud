@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { ProjectSettingsDTO } from 'app/core/project-settings/project-settings.model';
+import { projectSettingDTO } from 'app/core/project-settings/project-settings.model';
 import { map } from 'rxjs';
 import { transformRecordToMap } from 'app/common/utils';
 
@@ -9,31 +9,31 @@ import { transformRecordToMap } from 'app/common/utils';
 @Injectable({
   providedIn: 'root',
 })
-export class ProjectSettingsService {
+export class projectSettingService {
 
   http = inject(HttpClient);
-  resourcePath = environment.apiPath + '/api/projectSettingss';
+  resourcePath = environment.apiPath + '/api/projectSettings';
 
-  getAllProjectSettingses() {
-    return this.http.get<ProjectSettingsDTO[]>(this.resourcePath);
+  getAllprojectSettinges() {
+    return this.http.get<projectSettingDTO[]>(this.resourcePath);
   }
 
-  getProjectSettings(id: number) {
-    return this.http.get<ProjectSettingsDTO>(this.resourcePath + '/' + id);
+  getprojectSetting(id: number) {
+    return this.http.get<projectSettingDTO>(this.resourcePath + '/' + id);
   }
   download(id: number) {
     return this.http.get(this.resourcePath + '/download/' + id, { responseType:'blob' });
   }
 
-  createProjectSettings(projectSettingsDTO: ProjectSettingsDTO) {
-    return this.http.post<number>(this.resourcePath, projectSettingsDTO);
+  createprojectSetting(projectSettingDTO: projectSettingDTO) {
+    return this.http.post<number>(this.resourcePath, projectSettingDTO);
   }
 
-  updateProjectSettings(id: number, projectSettingsDTO: ProjectSettingsDTO) {
-    return this.http.put<number>(this.resourcePath + '/' + id, projectSettingsDTO);
+  updateprojectSetting(id: number, projectSettingDTO: projectSettingDTO) {
+    return this.http.put<number>(this.resourcePath + '/' + id, projectSettingDTO);
   }
 
-  deleteProjectSettings(id: number) {
+  deleteprojectSetting(id: number) {
     return this.http.delete(this.resourcePath + '/' + id);
   }
 

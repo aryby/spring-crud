@@ -9,9 +9,9 @@ import { CustomTableAttributesEditComponent } from './core/custom-table-attribut
 import { CustomMethodListComponent } from './core/custom-method/custom-method-list.component';
 import { CustomMethodAddComponent } from './core/custom-method/custom-method-add.component';
 import { CustomMethodEditComponent } from './core/custom-method/custom-method-edit.component';
-import { ProjectSettingsListComponent } from './core/project-settings/project-settings-list.component';
-import { ProjectSettingsAddComponent } from './core/project-settings/project-settings-add.component';
-import { ProjectSettingsEditComponent } from './core/project-settings/project-settings-edit.component';
+import { projectSettingListComponent } from './core/project-settings/project-settings-list.component';
+import { projectSettingAddComponent } from './core/project-settings/project-settings-add.component';
+import { projectSettingEditComponent } from './core/project-settings/project-settings-edit.component';
 import { GeneralSettingsListComponent } from './core/general-settings/general-settings-list.component';
 import { GeneralSettingsAddComponent } from './core/general-settings/general-settings-add.component';
 import { GeneralSettingsEditComponent } from './core/general-settings/general-settings-edit.component';
@@ -76,19 +76,19 @@ export const routes: Routes = [
     title: $localize`:@@customMethod.edit.headline:Edit Custom Method`
   },
   {
-    path: 'projectSettingss',
-    component: ProjectSettingsListComponent,
-    title: $localize`:@@projectSettings.list.headline:Project Settingses`
+    path: 'projectSettings',
+    component: projectSettingListComponent,
+    title: $localize`:@@projectSetting.list.headline:Project Settingses`
   },
   {
-    path: 'projectSettingss/add',
-    component: ProjectSettingsAddComponent,
-    title: $localize`:@@projectSettings.add.headline:Add Project Settings`
+    path: 'projectSettings/add',
+    component: projectSettingAddComponent,
+    title: $localize`:@@projectSetting.add.headline:Add Project Settings`
   },
   {
-    path: 'projectSettingss/edit/:id',
-    component: ProjectSettingsEditComponent,
-    title: $localize`:@@projectSettings.edit.headline:Edit Project Settings`
+    path: 'projectSettings/edit/:id',
+    component: projectSettingEditComponent,
+    title: $localize`:@@projectSetting.edit.headline:Edit Project Settings`
   },
   {
     path: 'generalSettingss',

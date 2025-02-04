@@ -7,6 +7,6 @@ export class CustomTableDTO {
   id?: number|null;
   name?: string|null;
   customTablesAttributes?: number[]|null;
-  projectSettings?: number|null;
+  projectSetting?: number|null;
 
 }

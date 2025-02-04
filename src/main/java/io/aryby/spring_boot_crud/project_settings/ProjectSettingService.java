@@ -1,9 +1,7 @@
 package io.aryby.spring_boot_crud.project_settings;
 
-import io.aryby.spring_boot_crud.SpringBootCrudApplication;
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
 import io.aryby.spring_boot_crud.custom_table.CustomTableRepository;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesDTO;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesService;
 import io.aryby.spring_boot_crud.database_settings.DatabaseSettings;
@@ -13,24 +11,21 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepos
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
-import io.aryby.spring_boot_crud.util.ReferencedWarning;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class ProjectSettingsService {
+public class ProjectSettingService {
 
-    private final ProjectSettingsRepository projectSettingsRepository;
+    private final ProjectSettingsRepository projectSettingRepository;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
     private final DeveloperPreferencesRepository developerPreferencesRepository;
@@ -38,13 +33,13 @@ public class ProjectSettingsService {
     private final CustomTableAttributesService customTableAttributesService;
 
 
-    public ProjectSettingsService(final ProjectSettingsRepository projectSettingsRepository,
+    public ProjectSettingService(final ProjectSettingsRepository projectSettingRepository,
                                   final GeneralSettingsRepository generalSettingsRepository,
                                   final DatabaseSettingsRepository databaseSettingsRepository,
                                   final DeveloperPreferencesRepository developerPreferencesRepository,
                                   final CustomTableRepository customTableRepository,
                                   final CustomTableAttributesService customTableAttributesService) {
-        this.projectSettingsRepository = projectSettingsRepository;
+        this.projectSettingRepository = projectSettingRepository;
         this.customTableAttributesService = customTableAttributesService;
         this.generalSettingsRepository = generalSettingsRepository;
         this.databaseSettingsRepository = databaseSettingsRepository;
@@ -53,56 +48,56 @@ public class ProjectSettingsService {
     }
 
     public List<ProjectSettingsDTO> findAll() {
-        final List<ProjectSettings> projectSettingses = projectSettingsRepository.findAll(Sort.by("id"));
-        return projectSettingses.stream()
+        final List<ProjectSettings> projectSettinges = projectSettingRepository.findAll(Sort.by("id"));
+        return projectSettinges.stream()
             .map(projectSettings -> mapToDTO(projectSettings, new ProjectSettingsDTO()))
             .toList();
     }
 
     public ProjectSettingsDTO get(final Long id) {
-        return projectSettingsRepository.findById(id)
-            .map(projectSettings -> mapToDTO(projectSettings, new ProjectSettingsDTO()))
+        return projectSettingRepository.findById(id)
+            .map(projectSetting -> mapToDTO(projectSetting, new ProjectSettingsDTO()))
             .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final ProjectSettingsDTO projectSettingsDTO) {
-        final ProjectSettings projectSettings = new ProjectSettings();
-        mapToEntity(projectSettingsDTO, projectSettings);
-        return projectSettingsRepository.save(projectSettings).getId();
+    public Long create(final ProjectSettingsDTO projectSettingDTO) {
+        final ProjectSettings projectSetting = new ProjectSettings();
+        mapToEntity(projectSettingDTO, projectSetting);
+        return projectSettingRepository.save(projectSetting).getId();
     }
 
-    public void update(final Long id, final ProjectSettingsDTO projectSettingsDTO) {
-        final ProjectSettings projectSettings = projectSettingsRepository.findById(id)
+    public void update(final Long id, final ProjectSettingsDTO projectSettingDTO) {
+        final ProjectSettings projectSetting = projectSettingRepository.findById(id)
             .orElseThrow(NotFoundException::new);
-        mapToEntity(projectSettingsDTO, projectSettings);
-        projectSettingsRepository.save(projectSettings);
+        mapToEntity(projectSettingDTO, projectSetting);
+        projectSettingRepository.save(projectSetting);
     }
 
     public void delete(final Long id) {
-        projectSettingsRepository.deleteById(id);
+        projectSettingRepository.deleteById(id);
     }
 
-    private ProjectSettingsDTO mapToDTO(final ProjectSettings projectSettings,
-                                        final ProjectSettingsDTO projectSettingsDTO) {
-        projectSettingsDTO.setId(projectSettings.getId());
-        projectSettingsDTO.setGeneralSettings(projectSettings.getGeneralSettings() == null ? null : projectSettings.getGeneralSettings());
-        projectSettingsDTO.setDatabaseSettings(projectSettings.getDatabaseSettings() == null ? null : projectSettings.getDatabaseSettings());
-        projectSettingsDTO.setDeveloperPreferences(projectSettings.getDeveloperPreferences() == null ? null : projectSettings.getDeveloperPreferences());
-        return projectSettingsDTO;
+    private ProjectSettingsDTO mapToDTO(final ProjectSettings projectSetting,
+                                        final ProjectSettingsDTO projectSettingDTO) {
+        projectSettingDTO.setId(projectSetting.getId());
+        projectSettingDTO.setGeneralSettings(projectSetting.getGeneralSettings() == null ? null : projectSetting.getGeneralSettings());
+        projectSettingDTO.setDatabaseSettings(projectSetting.getDatabaseSettings() == null ? null : projectSetting.getDatabaseSettings());
+        projectSettingDTO.setDeveloperPreferences(projectSetting.getDeveloperPreferences() == null ? null : projectSetting.getDeveloperPreferences());
+        return projectSettingDTO;
     }
 
-    private ProjectSettings mapToEntity(final ProjectSettingsDTO projectSettingsDTO,
-                                        final ProjectSettings projectSettings) {
-        final GeneralSettings generalSettings = projectSettingsDTO.getGeneralSettings() == null ? null : generalSettingsRepository.findById(projectSettingsDTO.getGeneralSettings())
+    private ProjectSettings mapToEntity(final ProjectSettingsDTO projectSettingDTO,
+                                        final ProjectSettings projectSetting) {
+        final GeneralSettings generalSettings = projectSettingDTO.getGeneralSettings() == null ? null : generalSettingsRepository.findById(projectSettingDTO.getGeneralSettings())
             .orElseThrow(() -> new NotFoundException("generalSettings not found"));
-        projectSettings.setGeneralSettings(generalSettings.getId());
-        final DatabaseSettings databaseSettings = projectSettingsDTO.getDatabaseSettings() == null ? null : databaseSettingsRepository.findById(projectSettingsDTO.getDatabaseSettings())
+        projectSetting.setGeneralSettings(generalSettings.getId());
+        final DatabaseSettings databaseSettings = projectSettingDTO.getDatabaseSettings() == null ? null : databaseSettingsRepository.findById(projectSettingDTO.getDatabaseSettings())
             .orElseThrow(() -> new NotFoundException("databaseSettings not found"));
-        projectSettings.setDatabaseSettings(databaseSettings.getId());
-        final DeveloperPreferences developerPreferences = projectSettingsDTO.getDeveloperPreferences() == null ? null : developerPreferencesRepository.findById(projectSettingsDTO.getDeveloperPreferences())
+        projectSetting.setDatabaseSettings(databaseSettings.getId());
+        final DeveloperPreferences developerPreferences = projectSettingDTO.getDeveloperPreferences() == null ? null : developerPreferencesRepository.findById(projectSettingDTO.getDeveloperPreferences())
             .orElseThrow(() -> new NotFoundException("developerPreferences not found"));
-        projectSettings.setDeveloperPreferences(developerPreferences.getId());
-        return projectSettings;
+        projectSetting.setDeveloperPreferences(developerPreferences.getId());
+        return projectSetting;
     }
 
 
@@ -110,10 +105,10 @@ public class ProjectSettingsService {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream);
 
-        ProjectSettings projectSettings = projectSettingsRepository.findById(projectId).orElseThrow(() ->
+        ProjectSettings projectSettings = projectSettingRepository.findById(projectId).orElseThrow(() ->
             new RuntimeException("Project settings not found"));
 
-        List<CustomTable> tables = customTableRepository.findAllByProjectSettings(projectId);
+        List<CustomTable> tables = customTableRepository.findAllByprojectSetting(projectId);
 
         // Create directory structure
         GeneralSettings generalSettings = generalSettingsRepository.findById(projectSettings.getGeneralSettings())
@@ -159,8 +154,8 @@ public class ProjectSettingsService {
     }
 
     private String generateJavaClass(CustomTable table, Long projectId) {
-        ProjectSettings projectSettings = projectSettingsRepository.findById(projectId).get();
-        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSettings.getGeneralSettings()).get();
+        ProjectSettings projectSetting = projectSettingRepository.findById(projectId).get();
+        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings()).get();
 
 
         StringBuilder sb = new StringBuilder();
@@ -219,10 +214,10 @@ public class ProjectSettingsService {
         return sb.toString();
     }
 
-    private String generatePomXml(ProjectSettings projectSettings) {
-        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSettings.getGeneralSettings()).get();
-        //DatabaseSettings databaseSettings = databaseSettingsRepository.findById(projectSettings.getDatabaseSettings()).get();
-        DeveloperPreferences developerPreferences = developerPreferencesRepository.findById(projectSettings.getDeveloperPreferences()).get();
+    private String generatePomXml(ProjectSettings projectSetting) {
+        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings()).get();
+        //DatabaseSettings databaseSettings = databaseSettingsRepository.findById(projectSetting.getDatabaseSettings()).get();
+        DeveloperPreferences developerPreferences = developerPreferencesRepository.findById(projectSetting.getDeveloperPreferences()).get();
 
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
@@ -317,8 +312,8 @@ public class ProjectSettingsService {
 
 
     private String generateSpringBootMain(Long projectId) {
-        ProjectSettings projectSettings = projectSettingsRepository.findById(projectId).get();
-        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSettings.getGeneralSettings()).get();
+        ProjectSettings projectSetting = projectSettingRepository.findById(projectId).get();
+        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings()).get();
 
 
         StringBuilder sb = new StringBuilder();

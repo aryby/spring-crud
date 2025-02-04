@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import { environment } from 'environments/environment';
-import {ProjectSettingsDTO} from "../project-settings/project-settings.model";
+import {projectSettingDTO} from "../project-settings/project-settings.model";
 import {DatabaseSettingsDTO} from "../database-settings/database-settings.model";
 import {GeneralSettingsDTO} from "../general-settings/general-settings.model";
 import {DeveloperPreferencesDTO} from "../developer-preferences/developer-preferences.model";
@@ -8,7 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {GeneralSettingsService} from "../general-settings/general-settings.service";
 import {DeveloperPreferencesService} from "../developer-preferences/developer-preferences.service";
 import {DatabaseSettingsService} from "../database-settings/database-settings.service";
-import {ProjectSettingsService} from "../project-settings/project-settings.service";
+import {projectSettingService} from "../project-settings/project-settings.service";
 import {MyStorageService} from "../../services/my-storage";
 import {Router} from "@angular/router";
 
@@ -30,7 +30,7 @@ export class HomeComponent {
   generalSettingsService= inject(GeneralSettingsService);
   developerPreferencesService= inject(DeveloperPreferencesService);
   databaseSettingsService= inject(DatabaseSettingsService);
-  projectSettingsService= inject(ProjectSettingsService);
+  projectSettingService= inject(projectSettingService);
 
   generalSettingsDTO :GeneralSettingsDTO={
     buildType:'maven',
@@ -51,16 +51,16 @@ export class HomeComponent {
     databaseProvider:'',
     addTimestamps:true,
   };
-  projectSettingsDto:ProjectSettingsDTO={
+  projectSettingDto:projectSettingDTO={
 
   };
     i:number = 0;
     test = ()=> {
       let vael=this.i >= 3;
       if (vael){
-        this.projectSettingsService.createProjectSettings(this.projectSettingsDto).subscribe(value => {
-          this.projectSettingsDto.id=value;
-          this._storage.setEntityToStorage(environment.entityProjectSetting, this.projectSettingsDto);
+        this.projectSettingService.createprojectSetting(this.projectSettingDto).subscribe(value => {
+          this.projectSettingDto.id=value;
+          this._storage.setEntityToStorage(environment.entityProjectSetting, this.projectSettingDto);
           this.router.navigateByUrl('/customTables');
         })
         this.i=0;
@@ -75,7 +75,7 @@ export class HomeComponent {
       this.generalSettingsDTO.id=val;
       this._storage.setEntityToStorage(environment.entityGeneralSetting, this.generalSettingsDTO);
 
-      this.projectSettingsDto.generalSettings=val;
+      this.projectSettingDto.generalSettings=val;
       this.i++;
       console.log("General Settings DTO i : "+this.i);
       console.log("General Settings DTO test : "+this.test());
@@ -84,7 +84,7 @@ export class HomeComponent {
       this.developerPreferencesDto.id=val;
       this._storage.setEntityToStorage(environment.entityPreference, this.developerPreferencesDto);
 
-      this.projectSettingsDto.developerPreferences=val;
+      this.projectSettingDto.developerPreferences=val;
       this.i++;
       console.log("Developer Preferences DTO i : "+this.i);
       console.log("Developer Preferences DTO test : "+this.test());
@@ -93,7 +93,7 @@ export class HomeComponent {
       this.databaseSettingDto.id=val;
       this._storage.setEntityToStorage(environment.entityDatabaseSettings, this.databaseSettingDto);
 
-      this.projectSettingsDto.databaseSettings=val;
+      this.projectSettingDto.databaseSettings=val;
       this.i++;
       console.log("Database Settings DTO i : "+this.i);
       console.log("Database Settings DTO test : "+this.test());

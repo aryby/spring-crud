@@ -28,7 +28,7 @@ export class CustomTableEditComponent implements OnInit {
     id: new FormControl({ value: null, disabled: true }),
     name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
     customTableAttributes: new FormControl(null),
-    projectSettings: new FormControl(null)
+    projectSetting: new FormControl(null)
   }, { updateOn: 'submit' });
   customTableDTO: CustomTableDTO={};
   customTableAttributes: CustomTableAttributesDTO[]=[];

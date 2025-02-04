@@ -23,7 +23,7 @@ export class GeneralSettingsListComponent implements OnInit, OnDestroy {
     const messages: Record<string, string> = {
       confirm: $localize`:@@delete.confirm:Do you really want to delete this element? This cannot be undone.`,
       deleted: $localize`:@@generalSettings.delete.success:General Settings was removed successfully.`,
-      'generalSettings.projectSettings.generalSettings.referenced': $localize`:@@generalSettings.projectSettings.generalSettings.referenced:This entity is still referenced by Project Settings ${details?.id} via field General Settings.`
+      'generalSettings.projectSetting.generalSettings.referenced': $localize`:@@generalSettings.projectSetting.generalSettings.referenced:This entity is still referenced by Project Settings ${details?.id} via field General Settings.`
     };
     return messages[key];
   }

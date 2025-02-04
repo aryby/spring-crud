@@ -14,7 +14,7 @@
                 <th scope="col" class="text-left p-2" i18n="@@customTable.id.label">Id</th>
                 <th scope="col" class="text-left p-2" i18n="@@customTable.name.label">Name</th>
                 <th scope="col" class="text-left p-2" i18n="@@customTable.customTableAttributes.label">Custom Table Attributes</th>
-                <th scope="col" class="text-left p-2" i18n="@@customTable.projectSettings.label">Project Settings</th>
+                <th scope="col" class="text-left p-2" i18n="@@customTable.projectSetting.label">Project Settings</th>
                 <th><!-- --></th>
             </tr>
         </thead>
@@ -24,7 +24,7 @@
                 <td class="p-2">{{ customTable.id }}</td>
                 <td class="p-2">{{ customTable.name }}</td>
                 <td class="p-2">{{ customTable.customTableAttributes }}</td>
-                <td class="p-2">{{ customTable.projectSettings }}</td>
+                <td class="p-2">{{ customTable.projectSetting }}</td>
                 <td class="p-2">
                     <div class="float-right whitespace-nowrap">
                         <a [routerLink]="['/customTables/edit', customTable.id]" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@customTable.list.edit">Edit</a>

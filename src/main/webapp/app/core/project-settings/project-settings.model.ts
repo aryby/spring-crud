@@ -1,6 +1,6 @@
-export class ProjectSettingsDTO {
+export class projectSettingDTO {
 
-  constructor(data:Partial<ProjectSettingsDTO>) {
+  constructor(data:Partial<projectSettingDTO>) {
     Object.assign(this, data);
   }
 

@@ -22,60 +22,60 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "/api/projectSettingss", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProjectSettingsResource {
+@RequestMapping(value = "/api/projectSettings", produces = MediaType.APPLICATION_JSON_VALUE)
+public class projectSettingResource {
 
-    private final ProjectSettingsService projectSettingsService;
+    private final projectSettingService projectSettingService;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
     private final DeveloperPreferencesRepository developerPreferencesRepository;
 
-    public ProjectSettingsResource(final ProjectSettingsService projectSettingsService,
+    public projectSettingResource(final projectSettingService projectSettingService,
             final GeneralSettingsRepository generalSettingsRepository,
             final DatabaseSettingsRepository databaseSettingsRepository,
             final DeveloperPreferencesRepository developerPreferencesRepository) {
-        this.projectSettingsService = projectSettingsService;
+        this.projectSettingService = projectSettingService;
         this.generalSettingsRepository = generalSettingsRepository;
         this.databaseSettingsRepository = databaseSettingsRepository;
         this.developerPreferencesRepository = developerPreferencesRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectSettingsDTO>> getAllProjectSettingss() {
-        return ResponseEntity.ok(projectSettingsService.findAll());
+    public ResponseEntity<List<projectSettingDTO>> getAllprojectSettings() {
+        return ResponseEntity.ok(projectSettingService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectSettingsDTO> getProjectSettings(
+    public ResponseEntity<projectSettingDTO> getprojectSetting(
             @PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(projectSettingsService.get(id));
+        return ResponseEntity.ok(projectSettingService.get(id));
     }
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createProjectSettings(
-            @RequestBody @Valid final ProjectSettingsDTO projectSettingsDTO) {
-        final Long createdId = projectSettingsService.create(projectSettingsDTO);
+    public ResponseEntity<Long> createprojectSetting(
+            @RequestBody @Valid final projectSettingDTO projectSettingDTO) {
+        final Long createdId = projectSettingService.create(projectSettingDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateProjectSettings(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final ProjectSettingsDTO projectSettingsDTO) {
-        projectSettingsService.update(id, projectSettingsDTO);
+    public ResponseEntity<Long> updateprojectSetting(@PathVariable(name = "id") final Long id,
+            @RequestBody @Valid final projectSettingDTO projectSettingDTO) {
+        projectSettingService.update(id, projectSettingDTO);
         return ResponseEntity.ok(id);
     }
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteProjectSettings(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Void> deleteprojectSetting(@PathVariable(name = "id") final Long id) {
 
-        projectSettingsService.delete(id);
+        projectSettingService.delete(id);
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/download/{id}")
     public byte[] generateZip(@PathVariable(name = "id") final Long id) throws IOException {
-        return projectSettingsService.generateZip(id);
+        return projectSettingService.generateZip(id);
     }
 
     @GetMapping("/generalSettingsValues")

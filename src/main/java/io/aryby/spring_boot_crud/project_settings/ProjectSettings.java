@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Entity
-@Table(name = "ProjectSettingses")
+@Table(name = "projectSettinges")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter

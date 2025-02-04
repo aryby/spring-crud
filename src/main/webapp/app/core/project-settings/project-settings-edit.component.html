@@ -1,13 +1,13 @@
 <div class="flex flex-wrap mb-6">
-    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@projectSettings.edit.headline">Edit Project Settings</h1>
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@projectSetting.edit.headline">Edit Project Settings</h1>
     <div>
-        <a routerLink="/projectSettingss" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@projectSettings.edit.back">Back to list</a>
+        <a routerLink="/projectSettings" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@projectSetting.edit.back">Back to list</a>
     </div>
 </div>
 <form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
-    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@projectSettings.id.label" label="Id" />
-    <app-input-row [group]="editForm" field="generalSettings" rowType="select" [options]="generalSettingsValues" i18n-label="@@projectSettings.generalSettings.label" label="General Settings" />
-    <app-input-row [group]="editForm" field="databaseSettings" rowType="select" [options]="databaseSettingsValues" i18n-label="@@projectSettings.databaseSettings.label" label="Database Settings" />
-    <app-input-row [group]="editForm" field="developerPreferences" rowType="select" [options]="developerPreferencesValues" i18n-label="@@projectSettings.developerPreferences.label" label="Developer Preferences" />
-    <input type="submit" i18n-value="@@projectSettings.edit.headline" value="Edit Project Settings" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@projectSetting.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="generalSettings" rowType="select" [options]="generalSettingsValues" i18n-label="@@projectSetting.generalSettings.label" label="General Settings" />
+    <app-input-row [group]="editForm" field="databaseSettings" rowType="select" [options]="databaseSettingsValues" i18n-label="@@projectSetting.databaseSettings.label" label="Database Settings" />
+    <app-input-row [group]="editForm" field="developerPreferences" rowType="select" [options]="developerPreferencesValues" i18n-label="@@projectSetting.developerPreferences.label" label="Developer Preferences" />
+    <input type="submit" i18n-value="@@projectSetting.edit.headline" value="Edit Project Settings" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
 </form>
