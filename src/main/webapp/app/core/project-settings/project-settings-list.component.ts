@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { ErrorHandler } from 'app/common/error-handler.injectable';
 import { ProjectSettingsService } from 'app/core/project-settings/project-settings.service';
 import { ProjectSettingsDTO } from 'app/core/project-settings/project-settings.model';
+import {MyStorageService} from "../../services/my-storage";
+import {environment} from "../../../environments/environment";
 
 
 @Component({
@@ -18,6 +20,8 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
   router = inject(Router);
   projectSettingses?: ProjectSettingsDTO[];
   navigationSubscription?: Subscription;
+
+  _myStorage = inject(MyStorageService);
 
   getMessage(key: string, details?: any) {
     const messages: Record<string, string> = {
@@ -74,4 +78,17 @@ export class ProjectSettingsListComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  downloadZip() {
+    let cusT = this._myStorage.getEntityToStorage(environment.entityProjectSetting);
+    this.projectSettingsService.download(cusT.id)
+      .subscribe(blob => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = 'generated_project.zip';
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      });
+  }
 }

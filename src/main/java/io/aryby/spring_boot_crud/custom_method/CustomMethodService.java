@@ -56,7 +56,7 @@ public class CustomMethodService {
         customMethodDTO.setMethodName(customMethod.getMethodName());
         customMethodDTO.setMethodBody(customMethod.getMethodBody());
         customMethodDTO.setAnnotations(customMethod.getAnnotations());
-        customMethodDTO.setCustomTable(customMethod.getCustomTable() == null ? null : customMethod.getCustomTable().getId());
+        customMethodDTO.setCustomTable(customMethod.getCustomTable());
         return customMethodDTO;
     }
 
@@ -65,9 +65,8 @@ public class CustomMethodService {
         customMethod.setMethodName(customMethodDTO.getMethodName());
         customMethod.setMethodBody(customMethodDTO.getMethodBody());
         customMethod.setAnnotations(customMethodDTO.getAnnotations());
-        final CustomTable customTable = customMethodDTO.getCustomTable() == null ? null : customTableRepository.findById(customMethodDTO.getCustomTable())
-                .orElseThrow(() -> new NotFoundException("customTable not found"));
-        customMethod.setCustomTable(customTable);
+        customMethod.setCustomTable(customMethodDTO.getCustomTable());
+
         return customMethod;
     }
 

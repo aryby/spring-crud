@@ -40,9 +40,8 @@ public class CustomMethod {
     @Column(columnDefinition = "longtext")
     private String annotations;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "custom_table_id")
-    private CustomTable customTable;
+    private Long customTable;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

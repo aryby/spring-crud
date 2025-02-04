@@ -49,7 +49,8 @@ export class CustomTableListComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.customTableService.getAllCustomTables()
+
+    this.customTableService.customTables$
       .subscribe({
         next: (data) => {
           console.log("this.customTables");

@@ -55,13 +55,20 @@ export class CustomTableAddComponent implements OnInit {
     console.log(this.developerPreferencesTableDTO);
     console.log(this.costumTableDTO);
 
-    if (this.costumTableDTO.id)
-    this.customTableService.getCustomTableAttributesByTableId(this.costumTableDTO.id)
-      .subscribe({
-        next: (data) => this.customTableAttributes = data,
-        error: (error) => this.errorHandler.handleServerError(error.error)
-      });
+    if (this.costumTableDTO.id != null) {
+      this.onSelectTable(this.costumTableDTO.id);
+      this.customTableService.customTableAttributes$
+        .subscribe({
+          next: (data) => this.customTableAttributes = data,
+          error: (error) => this.errorHandler.handleServerError(error.error)
+        });
+    }
 
+
+  }
+  // Load attributes when a table is selected
+  onSelectTable(tableId: number) {
+    this.customTableService.loadCustomTableAttributesByTableId(tableId);
   }
 
   handleSubmit() {

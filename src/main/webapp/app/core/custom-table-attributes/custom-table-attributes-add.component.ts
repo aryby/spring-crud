@@ -1,8 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators, FormsModule} from '@angular/forms';
-import {InputRowComponent} from 'app/common/input-row/input-row.component';
 import {CustomTableAttributesService} from 'app/core/custom-table-attributes/custom-table-attributes.service';
 import {CustomTableAttributesDTO} from 'app/core/custom-table-attributes/custom-table-attributes.model';
 import {ErrorHandler} from 'app/common/error-handler.injectable';
@@ -19,6 +18,8 @@ import {CustomTableService} from "../custom-table/custom-table.service";
 })
 export class CustomTableAttributesAddComponent {
 
+  accoladeOpen='{';
+  accoladeClose='}';
   customTableAttributesService = inject(CustomTableAttributesService);
   customTableService = inject(CustomTableService);
   router = inject(Router);
@@ -45,6 +46,10 @@ export class CustomTableAttributesAddComponent {
 
     if (this._mystorage.getEntityToStorage(environment.entityTable)) {
       this.customTableDTO = this._mystorage.getEntityToStorage(environment.entityTable);
+      this.customTableService.loadCustomTableAttributesByTableId(typeof this.customTableDTO.id === "number" ? this.customTableDTO.id :-1);
+      this.customTableService.customTableAttributes$.subscribe(customTableAttributes => {
+        this.customTableAttributes = customTableAttributes;
+      })
     }
   }
 
@@ -57,7 +62,7 @@ export class CustomTableAttributesAddComponent {
   }, {updateOn: 'submit'});
 
 
-  getMessage(key: string, details?: any) {
+  getMessage(key: string) {
     const messages: Record<string, string> = {
       created: $localize`:@@customTableAttributes.create.success:Custom Table Attributes was created successfully.`
     };

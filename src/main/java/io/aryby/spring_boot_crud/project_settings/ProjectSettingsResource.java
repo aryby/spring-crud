@@ -7,10 +7,10 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepos
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
-import io.aryby.spring_boot_crud.util.ReferencedException;
-import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Sort;
@@ -69,12 +69,13 @@ public class ProjectSettingsResource {
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteProjectSettings(@PathVariable(name = "id") final Long id) {
-        final ReferencedWarning referencedWarning = projectSettingsService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
+
         projectSettingsService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/download/{id}")
+    public byte[] generateZip(@PathVariable(name = "id") final Long id) throws IOException {
+        return projectSettingsService.generateZip(id);
     }
 
     @GetMapping("/generalSettingsValues")
@@ -97,5 +98,6 @@ public class ProjectSettingsResource {
                 .stream()
                 .collect(CustomCollectors.toSortedMap(DeveloperPreferences::getId, DeveloperPreferences::getId)));
     }
+
 
 }

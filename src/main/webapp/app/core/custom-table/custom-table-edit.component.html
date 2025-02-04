@@ -1,23 +1,2 @@
-<div class="flex flex-wrap mb-6">
-    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@customTable.edit.headline">Edit Custom Table</h1>
-    <div>
-        <a routerLink="/customTables" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@customTable.edit.back">Back to list</a>
-    </div>
-</div>
+<app-custom-table-attributes-add></app-custom-table-attributes-add>
 
-<ul>
-    <li *ngFor="let item  of customTableAttributes">
-        {{item.nameTypeModifier}} - {{item.nameAttribute}}
-    </li>
-</ul>
-<form>
-    <input class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" name="id" id="id" type="number" placeholder="{{customTableDTO.id}}" />
-    <input class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" name="name" id="name" type="text"  placeholder="{{customTableDTO.name}}"/>
-    <input class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" name="customTableAttributes" id="customTableAttributes" />
-
-    <app-custom-table-attributes-add></app-custom-table-attributes-add>
-    <!--
-    (click)="handleSubmit()"
-    -->
-    <input  i18n-value="@@customTable.edit.headline" value="Edit Custom Table" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
-</form>

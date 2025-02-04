@@ -31,6 +31,12 @@ public class GeneralSettings {
     private String projectName;
 
     @Column
+    private String groupId;
+
+    @Column
+    private String artifactId;
+
+    @Column
     private String buildType;
 
     @Column

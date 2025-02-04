@@ -54,6 +54,8 @@ public class GeneralSettingsService {
     private GeneralSettingsDTO mapToDTO(final GeneralSettings generalSettings,
             final GeneralSettingsDTO generalSettingsDTO) {
         generalSettingsDTO.setId(generalSettings.getId());
+        generalSettingsDTO.setArtifactId(generalSettings.getArtifactId());
+        generalSettingsDTO.setGroupId(generalSettings.getGroupId());
         generalSettingsDTO.setProjectName(generalSettings.getProjectName());
         generalSettingsDTO.setBuildType(generalSettings.getBuildType());
         generalSettingsDTO.setLanguage(generalSettings.getLanguage());
@@ -65,6 +67,8 @@ public class GeneralSettingsService {
     private GeneralSettings mapToEntity(final GeneralSettingsDTO generalSettingsDTO,
             final GeneralSettings generalSettings) {
         generalSettings.setProjectName(generalSettingsDTO.getProjectName());
+        generalSettings.setArtifactId(generalSettingsDTO.getArtifactId());
+        generalSettings.setGroupId(generalSettingsDTO.getGroupId());
         generalSettings.setBuildType(generalSettingsDTO.getBuildType());
         generalSettings.setLanguage(generalSettingsDTO.getLanguage());
         generalSettings.setEnableLombok(generalSettingsDTO.getEnableLombok());

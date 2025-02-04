@@ -12,7 +12,7 @@ import {CustomTableAttributesDTO} from "../custom-table-attributes/custom-table-
 
 @Component({
   selector: 'app-custom-table-edit',
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, CustomTableAttributesAddComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomTableAttributesAddComponent],
   templateUrl: './custom-table-edit.component.html'
 })
 export class CustomTableEditComponent implements OnInit {
@@ -33,53 +33,28 @@ export class CustomTableEditComponent implements OnInit {
   customTableDTO: CustomTableDTO={};
   customTableAttributes: CustomTableAttributesDTO[]=[];
 
-  getMessage(key: string, details?: any) {
-    const messages: Record<string, string> = {
-      updated: $localize`:@@customTable.update.success:Custom Table was updated successfully.`
-    };
-    return messages[key];
+
+
+
+
+
+  // Load attributes when a table is selected
+  onSelectTable(tableId: number) {
+    this.customTableService.loadCustomTableAttributesByTableId(tableId);
   }
 
   ngOnInit() {
     this.currentId = +this.route.snapshot.params['id'];
-    this.customTableService.getCustomTableAttributesByTableId(this.currentId)
-        .subscribe({
-          next: (data) => {
-
-            this.customTableAttributes = data
-            console.log("this.customTableAttributesValues + : ")
-            console.log(this.customTableAttributes)
-          },
-          error: (error) => {
-            console.log("this.error")
-            this.errorHandler.handleServerError(error.error)
-          }
-        });
+    this.onSelectTable(this.currentId);
     this.customTableService.getCustomTable(this.currentId!)
         .subscribe({
           next: (data) => {
             this.customTableDTO = data;
+
           },
           error: (error) => this.errorHandler.handleServerError(error.error)
         });
   }
 
-  handleSubmit() {
-    window.scrollTo(0, 0);
-    this.editForm.markAllAsTouched();
-    if (!this.editForm.valid) {
-      return;
-    }
-    const data = new CustomTableDTO(this.editForm.value);
-    this.customTableService.updateCustomTable(this.currentId!, data)
-        .subscribe({
-          next: () => this.router.navigate(['/customTables'], {
-            state: {
-              msgSuccess: this.getMessage('updated')
-            }
-          }),
-          error: (error) => this.errorHandler.handleServerError(error.error, this.editForm, this.getMessage)
-        });
-  }
 
 }

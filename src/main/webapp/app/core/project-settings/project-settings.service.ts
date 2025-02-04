@@ -21,6 +21,9 @@ export class ProjectSettingsService {
   getProjectSettings(id: number) {
     return this.http.get<ProjectSettingsDTO>(this.resourcePath + '/' + id);
   }
+  download(id: number) {
+    return this.http.get(this.resourcePath + '/download/' + id, { responseType:'blob' });
+  }
 
   createProjectSettings(projectSettingsDTO: ProjectSettingsDTO) {
     return this.http.post<number>(this.resourcePath, projectSettingsDTO);

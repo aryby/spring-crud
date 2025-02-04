@@ -5,13 +5,19 @@
             <h2 class="text-lg font-semibold mb-3">Project Settings</h2>
             <div class="space-y-4">
                 <div>
-                    <label for="projectGroup" class="block text-sm font-medium text-gray-700">Project group</label>
-                    <input type="text" id="projectGroup" [(ngModel)]="generalSettingsDTO.projectName" name="projectGroup" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <label for="artifactId" class="block text-sm font-medium text-gray-700">Artifact Id</label>
+                    <input type="text" id="artifactId" [(ngModel)]="generalSettingsDTO.artifactId" name="artifactId" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
+                <div>
+                    <label for="groupId" class="block text-sm font-medium text-gray-700">Group Id</label>
+                    <input type="text" id="groupId" [(ngModel)]="generalSettingsDTO.groupId" name="groupId" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
                 <div>
                     <label for="projectName" class="block text-sm font-medium text-gray-700">Project name</label>
                     <input type="text" id="projectName" [(ngModel)]="generalSettingsDTO.projectName" name="projectName" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Build type</label>
                     <div class="flex items-center space-x-4 mt-1">

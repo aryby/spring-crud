@@ -3,6 +3,10 @@
     <div>
         <a routerLink="/projectSettingss/add" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2" i18n="@@projectSettings.list.createNew">Create new Project Settings</a>
     </div>
+
+    <button (click)="downloadZip()" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2">
+        generate ZIP
+    </button>
 </div>
 @if (!projectSettingses || projectSettingses.length === 0) {
 <div i18n="@@projectSettings.list.empty">No Project Settingses could be found.</div>

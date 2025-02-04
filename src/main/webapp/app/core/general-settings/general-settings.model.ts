@@ -10,5 +10,6 @@ export class GeneralSettingsDTO {
   language?: string|null;
   enableLombok?: boolean|null;
   frontendType?: string|null;
-
+  groupId?: string|null;
+  artifactId?: string|null;
 }
