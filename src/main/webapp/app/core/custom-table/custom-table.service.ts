@@ -4,7 +4,7 @@ import { environment } from 'environments/environment';
 import { CustomTableDTO } from 'app/core/custom-table/custom-table.model';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { transformRecordToMap } from 'app/common/utils';
-import { CustomTableAttributesDTO } from '../custom-table-attributes/custom-table-attributes.model';
+import { CustomTableAttributeDTO } from '../custom-table-attributes/custom-table-attributes.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +17,8 @@ export class CustomTableService {
   private customTablesSubject = new BehaviorSubject<CustomTableDTO[]>([]);
   customTables$ = this.customTablesSubject.asObservable();
 
-  private customTableAttributesSubject = new BehaviorSubject<CustomTableAttributesDTO[]>([]);
-  customTableAttributes$ = this.customTableAttributesSubject.asObservable();
+  private customTableAttributeSubject = new BehaviorSubject<CustomTableAttributeDTO[]>([]);
+  customTableAttribute$ = this.customTableAttributeSubject.asObservable();
 
   constructor() {
     this.loadAllCustomTables(); // Initial load
@@ -37,9 +37,9 @@ export class CustomTableService {
   /**
    * Load attributes for a specific table
    */
-  loadCustomTableAttributesByTableId(id: number) {
-    this.http.get<CustomTableAttributesDTO[]>(`${this.resourcePath}/customTable/${id}`).subscribe({
-      next: (data) => this.customTableAttributesSubject.next(data),
+  loadCustomTableAttributeByTableId(id: number) {
+    this.http.get<CustomTableAttributeDTO[]>(`${this.resourcePath}/customTable/${id}`).subscribe({
+      next: (data) => this.customTableAttributeSubject.next(data),
       error: (error) => console.error('Error fetching table attributes:', error),
     });
   }

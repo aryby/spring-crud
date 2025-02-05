@@ -2,8 +2,8 @@ import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators, FormsModule} from '@angular/forms';
-import {CustomTableAttributesService} from 'app/core/custom-table-attributes/custom-table-attributes.service';
-import {CustomTableAttributesDTO} from 'app/core/custom-table-attributes/custom-table-attributes.model';
+import {CustomTableAttributeService} from 'app/core/custom-table-attributes/custom-table-attributes.service';
+import {CustomTableAttributeDTO} from 'app/core/custom-table-attributes/custom-table-attributes.model';
 import {ErrorHandler} from 'app/common/error-handler.injectable';
 import {MyStorageService} from "../../services/my-storage";
 import {environment} from "../../../environments/environment";
@@ -16,18 +16,18 @@ import {CustomTableService} from "../custom-table/custom-table.service";
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './custom-table-attributes-add.component.html'
 })
-export class CustomTableAttributesAddComponent {
+export class CustomTableAttributeAddComponent {
 
   accoladeOpen='{';
   accoladeClose='}';
-  customTableAttributesService = inject(CustomTableAttributesService);
+  customTableAttributeService = inject(CustomTableAttributeService);
   customTableService = inject(CustomTableService);
   router = inject(Router);
   errorHandler = inject(ErrorHandler);
   nameTypeModifiersValues: Record<string, string> | Map<number, string> | undefined;
   _mystorage = inject(MyStorageService);
-  customTableAttributes: CustomTableAttributesDTO[] = []
-  customTableAttributesDTO: CustomTableAttributesDTO = {};
+  customTableAttribute: CustomTableAttributeDTO[] = []
+  customTableAttributeDTO: CustomTableAttributeDTO = {};
   customTableDTO: CustomTableDTO = {id: 0};
 
   initnameTypeModifiersValues(): void {
@@ -46,9 +46,9 @@ export class CustomTableAttributesAddComponent {
 
     if (this._mystorage.getEntityToStorage(environment.entityTable)) {
       this.customTableDTO = this._mystorage.getEntityToStorage(environment.entityTable);
-      this.customTableService.loadCustomTableAttributesByTableId(typeof this.customTableDTO.id === "number" ? this.customTableDTO.id :-1);
-      this.customTableService.customTableAttributes$.subscribe(customTableAttributes => {
-        this.customTableAttributes = customTableAttributes;
+      this.customTableService.loadCustomTableAttributeByTableId(typeof this.customTableDTO.id === "number" ? this.customTableDTO.id :-1);
+      this.customTableService.customTableAttribute$.subscribe(customTableAttribute => {
+        this.customTableAttribute = customTableAttribute;
       })
     }
   }
@@ -64,7 +64,7 @@ export class CustomTableAttributesAddComponent {
 
   getMessage(key: string) {
     const messages: Record<string, string> = {
-      created: $localize`:@@customTableAttributes.create.success:Custom Table Attributes was created successfully.`
+      created: $localize`:@@customTableAttribute.create.success:Custom Table Attributes was created successfully.`
     };
     return messages[key];
   }
@@ -73,16 +73,16 @@ export class CustomTableAttributesAddComponent {
   handleSubmit() {
     window.scrollTo(0, 0);
 
-    this.customTableAttributesDTO.customTable=this.customTableDTO.id;
-    this.customTableAttributesService.createCustomTableAttributes(this.customTableAttributesDTO)
+    this.customTableAttributeDTO.customTable=this.customTableDTO.id;
+    this.customTableAttributeService.createCustomTableAttribute(this.customTableAttributeDTO)
       .subscribe({
         next: (data: number) => {
-          this.customTableAttributesDTO.id = data;
+          this.customTableAttributeDTO.id = data;
           this.customTableDTO.customTablesAttributes?.push(data);
          console.log("attributes added successfully.");
           console.log(this.customTableDTO);
-          this.customTableAttributes.push(this.customTableAttributesDTO);
-          this._mystorage.setEntityToStorage(environment.customTableAttributes, this.customTableAttributesDTO);
+          this.customTableAttribute.push(this.customTableAttributeDTO);
+          this._mystorage.setEntityToStorage(environment.customTableAttribute, this.customTableAttributeDTO);
         },
         error: (error) => this.errorHandler.handleServerError(error.error, this.addForm, this.getMessage)
       });

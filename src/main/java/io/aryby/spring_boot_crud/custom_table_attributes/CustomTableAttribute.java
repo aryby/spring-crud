@@ -13,11 +13,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Entity
-@Table(name = "CustomTableAttributeses")
+@Table(name = "CustomTableAttributees")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class CustomTableAttributes {
+public class CustomTableAttribute {
 
     @Id
     @Column(nullable = false, updatable = false)

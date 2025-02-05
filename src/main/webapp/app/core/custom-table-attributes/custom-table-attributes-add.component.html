@@ -6,12 +6,12 @@
 
             <div class="space-y-4">
                 <input
-                    type="text" name="nameTypeModifier" [(ngModel)]="customTableAttributesDTO.nameTypeModifier"
+                    type="text" name="nameTypeModifier" [(ngModel)]="customTableAttributeDTO.nameTypeModifier"
                     placeholder="Name"
                     class="w-full p-3 rounded-lg bg-white border text-sm border-gray-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                 />
                 <input
-                    type="text"  name="nameAttribute" [(ngModel)]="customTableAttributesDTO.nameAttribute"
+                    type="text"  name="nameAttribute" [(ngModel)]="customTableAttributeDTO.nameAttribute"
                     placeholder="E-mail"
                     class="w-full p-3 rounded-lg bg-white border text-sm border-gray-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                 />
@@ -32,7 +32,7 @@
                     Class {{ customTableDTO.name }} {{accoladeOpen}}
                 </h3>
                 <div class="mt-0">
-                    <div class="grid grid-cols-3" *ngFor="let item  of customTableAttributes">
+                    <div class="grid grid-cols-3" *ngFor="let item  of customTableAttribute">
                         <span class="text-gray-600 text-sm">private {{item.nameTypeModifier}}</span>
                         <span class="text-gray-800 text-sm col-span-2">{{item.nameAttribute}}</span>
                     </div>

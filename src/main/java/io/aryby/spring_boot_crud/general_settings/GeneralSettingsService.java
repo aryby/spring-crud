@@ -40,20 +40,12 @@ public class GeneralSettingsService {
             .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final GeneralSettingsDTO generalSettingsDTO) {
-        logger.info("create a general settings : " + generalSettingsDTO.toString());
-
+    public Long create(final GeneralSettingsDTO generalSettingsDTO) throws NotFoundException {
         final GeneralSettings generalSettings = new GeneralSettings();
-        try {
-            GeneralSettings ge = generalSettingsRepository.save(generalSettings);
-            mapToEntity(generalSettingsDTO, generalSettings);
-            logger.info("create a general settings : " + generalSettings);
-            return ge.getId();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            logger.error("creating General Settings : " + generalSettingsDTO);
-        }
-        return (long) -1;
+        mapToEntity(generalSettingsDTO, generalSettings);
+        logger.info("creating a general settings : " + generalSettings);
+        return generalSettingsRepository.save(generalSettings).getId();
+
     }
 
     public void update(final Long id, final GeneralSettingsDTO generalSettingsDTO) {

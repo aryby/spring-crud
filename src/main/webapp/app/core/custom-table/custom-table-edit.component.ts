@@ -6,13 +6,13 @@ import { InputRowComponent } from 'app/common/input-row/input-row.component';
 import { CustomTableService } from 'app/core/custom-table/custom-table.service';
 import { CustomTableDTO } from 'app/core/custom-table/custom-table.model';
 import { ErrorHandler } from 'app/common/error-handler.injectable';
-import {CustomTableAttributesAddComponent} from "../custom-table-attributes/custom-table-attributes-add.component";
-import {CustomTableAttributesDTO} from "../custom-table-attributes/custom-table-attributes.model";
+import {CustomTableAttributeAddComponent} from "../custom-table-attributes/custom-table-attributes-add.component";
+import {CustomTableAttributeDTO} from "../custom-table-attributes/custom-table-attributes.model";
 
 
 @Component({
   selector: 'app-custom-table-edit',
-  imports: [CommonModule, ReactiveFormsModule, CustomTableAttributesAddComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomTableAttributeAddComponent],
   templateUrl: './custom-table-edit.component.html'
 })
 export class CustomTableEditComponent implements OnInit {
@@ -27,11 +27,11 @@ export class CustomTableEditComponent implements OnInit {
   editForm = new FormGroup({
     id: new FormControl({ value: null, disabled: true }),
     name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
-    customTableAttributes: new FormControl(null),
+    customTableAttribute: new FormControl(null),
     projectSetting: new FormControl(null)
   }, { updateOn: 'submit' });
   customTableDTO: CustomTableDTO={};
-  customTableAttributes: CustomTableAttributesDTO[]=[];
+  customTableAttribute: CustomTableAttributeDTO[]=[];
 
 
 
@@ -40,7 +40,7 @@ export class CustomTableEditComponent implements OnInit {
 
   // Load attributes when a table is selected
   onSelectTable(tableId: number) {
-    this.customTableService.loadCustomTableAttributesByTableId(tableId);
+    this.customTableService.loadCustomTableAttributeByTableId(tableId);
   }
 
   ngOnInit() {

@@ -9,7 +9,7 @@ import {MyStorageService} from "../../services/my-storage";
 import {environment} from "../../../environments/environment";
 import {DeveloperPreferencesDTO} from "../developer-preferences/developer-preferences.model";
 import {projectSettingDTO} from "../project-settings/project-settings.model";
-import {CustomTableAttributesDTO} from "../custom-table-attributes/custom-table-attributes.model";
+import {CustomTableAttributeDTO} from "../custom-table-attributes/custom-table-attributes.model";
 
 
 @Component({
@@ -33,10 +33,10 @@ export class CustomTableAddComponent implements OnInit {
 
   addForm = new FormGroup({
     name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
-    customTableAttributes: new FormControl(null),
+    customTableAttribute: new FormControl(null),
     projectSetting: new FormControl(null)
   }, {updateOn: 'submit'});
-  customTableAttributes: CustomTableAttributesDTO[]=[];
+  customTableAttribute: CustomTableAttributeDTO[]=[];
 
   getMessage(key: string, details?: any) {
     const messages: Record<string, string> = {
@@ -57,9 +57,9 @@ export class CustomTableAddComponent implements OnInit {
 
     if (this.costumTableDTO.id != null) {
       this.onSelectTable(this.costumTableDTO.id);
-      this.customTableService.customTableAttributes$
+      this.customTableService.customTableAttribute$
         .subscribe({
-          next: (data) => this.customTableAttributes = data,
+          next: (data) => this.customTableAttribute = data,
           error: (error) => this.errorHandler.handleServerError(error.error)
         });
     }
@@ -68,7 +68,7 @@ export class CustomTableAddComponent implements OnInit {
   }
   // Load attributes when a table is selected
   onSelectTable(tableId: number) {
-    this.customTableService.loadCustomTableAttributesByTableId(tableId);
+    this.customTableService.loadCustomTableAttributeByTableId(tableId);
   }
 
   handleSubmit() {

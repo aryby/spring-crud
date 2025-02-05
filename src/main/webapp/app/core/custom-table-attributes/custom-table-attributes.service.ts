@@ -1,34 +1,34 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { CustomTableAttributesDTO } from 'app/core/custom-table-attributes/custom-table-attributes.model';
+import { CustomTableAttributeDTO } from 'app/core/custom-table-attributes/custom-table-attributes.model';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class CustomTableAttributesService {
+export class CustomTableAttributeService {
 
   http = inject(HttpClient);
-  resourcePath = environment.apiPath + '/api/customTableAttributess';
+  resourcePath = environment.apiPath + '/api/customTableAttribute';
 
-  getAllCustomTableAttributeses() {
-    return this.http.get<CustomTableAttributesDTO[]>(this.resourcePath);
+  getAllCustomTableAttributees() {
+    return this.http.get<CustomTableAttributeDTO[]>(this.resourcePath);
   }
 
-  getCustomTableAttributes(id: number) {
-    return this.http.get<CustomTableAttributesDTO>(this.resourcePath + '/' + id);
+  getCustomTableAttribute(id: number) {
+    return this.http.get<CustomTableAttributeDTO>(this.resourcePath + '/' + id);
   }
 
-  createCustomTableAttributes(customTableAttributesDTO: CustomTableAttributesDTO) {
-    return this.http.post<number>(this.resourcePath, customTableAttributesDTO);
+  createCustomTableAttribute(customTableAttributeDTO: CustomTableAttributeDTO) {
+    return this.http.post<number>(this.resourcePath, customTableAttributeDTO);
   }
 
-  updateCustomTableAttributes(id: number, customTableAttributesDTO: CustomTableAttributesDTO) {
-    return this.http.put<number>(this.resourcePath + '/' + id, customTableAttributesDTO);
+  updateCustomTableAttribute(id: number, customTableAttributeDTO: CustomTableAttributeDTO) {
+    return this.http.put<number>(this.resourcePath + '/' + id, customTableAttributeDTO);
   }
 
-  deleteCustomTableAttributes(id: number) {
+  deleteCustomTableAttribute(id: number) {
     return this.http.delete(this.resourcePath + '/' + id);
   }
 

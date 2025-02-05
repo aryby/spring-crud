@@ -8,6 +8,6 @@ export const environment = {
   entityProjectSetting:'entityprojectSetting',
   entityGeneralSetting:'entityGeneralSettings',
   entityDatabaseSettings:'entityDatabaseSettings',
-  customTableAttributes:'customTableAttributes',
+  customTableAttribute:'customTableAttribute',
   entityPreference:'entityPreference',
 };

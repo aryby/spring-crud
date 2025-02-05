@@ -1,10 +1,11 @@
 package io.aryby.spring_boot_crud.custom_table;
 
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
+import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttribute;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 public class CustomTableDTO {
 
     private Long id;
@@ -19,7 +21,7 @@ public class CustomTableDTO {
     @NotNull
     @Size(max = 255)
     private String name;
-    private List<CustomTableAttributes> customTablesAttributes;
+    private List<CustomTableAttribute> customTablesAttributes;
     private Long projectSetting;
 
 }

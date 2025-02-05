@@ -10,5 +10,5 @@ export const environment = {
   entityDatabaseSettings:'entityDatabaseSettings',
 
   entityPreference:'entityPreference',
-  customTableAttributes:'customTableAttributes',
+  customTableAttribute:'customTableAttribute',
 };

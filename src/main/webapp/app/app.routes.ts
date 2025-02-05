@@ -3,9 +3,9 @@ import { HomeComponent } from './core/home/home.component';
 import { CustomTableListComponent } from './core/custom-table/custom-table-list.component';
 import { CustomTableAddComponent } from './core/custom-table/custom-table-add.component';
 import { CustomTableEditComponent } from './core/custom-table/custom-table-edit.component';
-import { CustomTableAttributesListComponent } from './core/custom-table-attributes/custom-table-attributes-list.component';
-import { CustomTableAttributesAddComponent } from './core/custom-table-attributes/custom-table-attributes-add.component';
-import { CustomTableAttributesEditComponent } from './core/custom-table-attributes/custom-table-attributes-edit.component';
+import { CustomTableAttributeListComponent } from './core/custom-table-attributes/custom-table-attributes-list.component';
+import { CustomTableAttributeAddComponent } from './core/custom-table-attributes/custom-table-attributes-add.component';
+import { CustomTableAttributeEditComponent } from './core/custom-table-attributes/custom-table-attributes-edit.component';
 import { CustomMethodListComponent } from './core/custom-method/custom-method-list.component';
 import { CustomMethodAddComponent } from './core/custom-method/custom-method-add.component';
 import { CustomMethodEditComponent } from './core/custom-method/custom-method-edit.component';
@@ -46,19 +46,19 @@ export const routes: Routes = [
     title: $localize`:@@customTable.edit.headline:Edit Custom Table`
   },
   {
-    path: 'customTableAttributess',
-    component: CustomTableAttributesListComponent,
-    title: $localize`:@@customTableAttributes.list.headline:Custom Table Attributeses`
+    path: 'customTableAttribute',
+    component: CustomTableAttributeListComponent,
+    title: $localize`:@@customTableAttribute.list.headline:Custom Table Attributeses`
   },
   {
-    path: 'customTableAttributess/add',
-    component: CustomTableAttributesAddComponent,
-    title: $localize`:@@customTableAttributes.add.headline:Add Custom Table Attributes`
+    path: 'customTableAttribute/add',
+    component: CustomTableAttributeAddComponent,
+    title: $localize`:@@customTableAttribute.add.headline:Add Custom Table Attributes`
   },
   {
-    path: 'customTableAttributess/edit/:id',
-    component: CustomTableAttributesEditComponent,
-    title: $localize`:@@customTableAttributes.edit.headline:Edit Custom Table Attributes`
+    path: 'customTableAttribute/edit/:id',
+    component: CustomTableAttributeEditComponent,
+    title: $localize`:@@customTableAttribute.edit.headline:Edit Custom Table Attributes`
   },
   {
     path: 'customMethods',

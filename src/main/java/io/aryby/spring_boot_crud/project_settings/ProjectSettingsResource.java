@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/projectSettings", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProjectSettingsResource {
 
+    private final Logger logger = LoggerFactory.getLogger(ProjectSettingsResource.class);
     private final ProjectSettingService projectSettingService;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
@@ -48,12 +52,14 @@ public class ProjectSettingsResource {
     @GetMapping("/{id}")
     public ResponseEntity<ProjectSettingsDTO> getProjectSetting(
             @PathVariable(name = "id") final Long id) {
+        logger.info("Get project setting by id: {}", id);
         return ResponseEntity.ok(projectSettingService.get(id));
     }
 
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ProjectSettingsDTO> getProjectSettingBySlug(
         @PathVariable(name = "slug") final String slug) {
+        logger.info("Get project setting by slug: {}", slug);
         return ResponseEntity.ok(projectSettingService.getBySlug(slug));
     }
 
@@ -61,6 +67,7 @@ public class ProjectSettingsResource {
     @ApiResponse(responseCode = "201")
     public ResponseEntity<ProjectSettings> createProjectSetting(
             @RequestBody @Valid final ProjectSettingsDTO projectSettingDTO) {
+        logger.info("Create project setting: {}", projectSettingDTO);
         final ProjectSettings created = projectSettingService.create(projectSettingDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -68,6 +75,7 @@ public class ProjectSettingsResource {
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateProjectSetting(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final ProjectSettingsDTO projectSettingDTO) {
+        logger.info("Update project setting: {}", projectSettingDTO);
         projectSettingService.update(id, projectSettingDTO);
         return ResponseEntity.ok(id);
     }
@@ -75,12 +83,13 @@ public class ProjectSettingsResource {
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteProjectSetting(@PathVariable(name = "id") final Long id) {
-
+        logger.info("Delete project setting: {}", id);
         projectSettingService.delete(id);
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/download/{id}")
     public byte[] generateZip(@PathVariable(name = "id") final Long id) throws IOException {
+        logger.info("Generate zip file: {}", id);
         return projectSettingService.generateZip(id);
     }
 

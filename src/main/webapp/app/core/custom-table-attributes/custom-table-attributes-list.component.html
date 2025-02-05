@@ -1,32 +1,32 @@
 <div class="flex flex-wrap mb-6">
-    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@customTableAttributes.list.headline">Custom Table Attributeses</h1>
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@customTableAttribute.list.headline">Custom Table Attributeses</h1>
     <div>
-        <a routerLink="/customTableAttributess/add" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2" i18n="@@customTableAttributes.list.createNew">Create new Custom Table Attributes</a>
+        <a routerLink="/customTableAttribute/add" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2" i18n="@@customTableAttribute.list.createNew">Create new Custom Table Attributes</a>
     </div>
 </div>
-@if (!customTableAttributeses || customTableAttributeses.length === 0) {
-<div i18n="@@customTableAttributes.list.empty">No Custom Table Attributeses could be found.</div>
+@if (!customTableAttributees || customTableAttributees.length === 0) {
+<div i18n="@@customTableAttribute.list.empty">No Custom Table Attributeses could be found.</div>
 } @else {
 <div class="overflow-x-auto">
     <table class="w-full">
         <thead>
             <tr>
-                <th scope="col" class="text-left p-2" i18n="@@customTableAttributes.id.label">Id</th>
-                <th scope="col" class="text-left p-2" i18n="@@customTableAttributes.nameTypeModifier.label">Name Type Modifier</th>
-                <th scope="col" class="text-left p-2" i18n="@@customTableAttributes.nameAttribute.label">Name Attribute</th>
+                <th scope="col" class="text-left p-2" i18n="@@customTableAttribute.id.label">Id</th>
+                <th scope="col" class="text-left p-2" i18n="@@customTableAttribute.nameTypeModifier.label">Name Type Modifier</th>
+                <th scope="col" class="text-left p-2" i18n="@@customTableAttribute.nameAttribute.label">Name Attribute</th>
                 <th><!-- --></th>
             </tr>
         </thead>
         <tbody class="border-t-2 border-black">
-            @for (customTableAttributes of customTableAttributeses; track customTableAttributes.id) {
+            @for (customTableAttribute of customTableAttributees; track customTableAttribute.id) {
             <tr class="odd:bg-gray-100">
-                <td class="p-2">{{ customTableAttributes.id }}</td>
-                <td class="p-2">{{ customTableAttributes.nameTypeModifier }}</td>
-                <td class="p-2">{{ customTableAttributes.nameAttribute }}</td>
+                <td class="p-2">{{ customTableAttribute.id }}</td>
+                <td class="p-2">{{ customTableAttribute.nameTypeModifier }}</td>
+                <td class="p-2">{{ customTableAttribute.nameAttribute }}</td>
                 <td class="p-2">
                     <div class="float-right whitespace-nowrap">
-                        <a [routerLink]="['/customTableAttributess/edit', customTableAttributes.id]" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@customTableAttributes.list.edit">Edit</a>
-                        <button type="button" (click)="confirmDelete(customTableAttributes.id!)" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@customTableAttributes.list.delete">Delete</button>
+                        <a [routerLink]="['/customTableAttribute/edit', customTableAttribute.id]" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@customTableAttribute.list.edit">Edit</a>
+                        <button type="button" (click)="confirmDelete(customTableAttribute.id!)" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-3 rounded px-2.5 py-1.5 text-sm" i18n="@@customTableAttribute.list.delete">Delete</button>
                     </div>
                 </td>
             </tr>

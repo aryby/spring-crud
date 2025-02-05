@@ -1,6 +1,6 @@
-export class CustomTableAttributesDTO {
+export class CustomTableAttributeDTO {
 
-  constructor(data:Partial<CustomTableAttributesDTO>) {
+  constructor(data:Partial<CustomTableAttributeDTO>) {
     Object.assign(this, data);
   }
 

@@ -2,8 +2,8 @@ package io.aryby.spring_boot_crud.custom_table;
 
 import io.aryby.spring_boot_crud.custom_method.CustomMethod;
 import io.aryby.spring_boot_crud.custom_method.CustomMethodRepository;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesRepository;
+import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttribute;
+import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeRepository;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.NotFoundException;
@@ -19,22 +19,22 @@ import org.springframework.stereotype.Service;
 public class CustomTableService {
 
     private final CustomTableRepository customTableRepository;
-    private final CustomTableAttributesRepository customTableAttributesRepository;
+    private final CustomTableAttributeRepository customTableAttributeRepository;
     private final ProjectSettingsRepository projectSettingRepository;
     private final CustomMethodRepository customMethodRepository;
 
     public CustomTableService(final CustomTableRepository customTableRepository,
-            final CustomTableAttributesRepository customTableAttributesRepository,
+            final CustomTableAttributeRepository customTableAttributeRepository,
             final ProjectSettingsRepository projectSettingRepository,
             final CustomMethodRepository customMethodRepository) {
         this.customTableRepository = customTableRepository;
-        this.customTableAttributesRepository = customTableAttributesRepository;
+        this.customTableAttributeRepository = customTableAttributeRepository;
         this.projectSettingRepository = projectSettingRepository;
         this.customMethodRepository = customMethodRepository;
     }
 
-    public List<CustomTableAttributes>findAllAttributesByTableId(Long id){
-        return customTableAttributesRepository.findByCustomTable(id);
+    public List<CustomTableAttribute>findAllAttributesByTableId(Long id){
+        return customTableAttributeRepository.findByCustomTable(id);
     }
 
     public List<CustomTableDTO> findAll() {
@@ -72,7 +72,7 @@ public class CustomTableService {
         customTableDTO.setId(customTable.getId());
         customTableDTO.setName(customTable.getName());
        customTableDTO.setCustomTablesAttributes(
-           customTableAttributesRepository.
+           customTableAttributeRepository.
                findByCustomTable(customTable.getId()));
         return customTableDTO;
     }

@@ -1,6 +1,5 @@
 package io.aryby.spring_boot_crud.custom_table_attributes;
 
-import io.aryby.spring_boot_crud.custom_table.CustomTable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CustomTableAttributesDTO {
+public class CustomTableAttributeDTO {
 
     private Long id;
 

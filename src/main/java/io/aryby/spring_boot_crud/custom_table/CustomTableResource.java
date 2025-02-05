@@ -1,7 +1,7 @@
 package io.aryby.spring_boot_crud.custom_table;
 
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributes;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributesRepository;
+import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttribute;
+import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeRepository;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,33 +27,36 @@ import org.springframework.web.bind.annotation.*;
 public class CustomTableResource {
 
     private final CustomTableService customTableService;
-    private final CustomTableAttributesRepository customTableAttributesRepository;
+    private final CustomTableAttributeRepository customTableAttributeRepository;
     private final ProjectSettingsRepository projectSettingRepository;
+    private final Logger logger = LoggerFactory.getLogger(CustomTableResource.class);
 
     public CustomTableResource(final CustomTableService customTableService,
-            final CustomTableAttributesRepository customTableAttributesRepository,
+            final CustomTableAttributeRepository customTableAttributeRepository,
             final ProjectSettingsRepository projectSettingRepository) {
         this.customTableService = customTableService;
-        this.customTableAttributesRepository = customTableAttributesRepository;
+        this.customTableAttributeRepository = customTableAttributeRepository;
         this.projectSettingRepository = projectSettingRepository;
     }
 
     @GetMapping
     public ResponseEntity<List<CustomTableDTO>> getAllCustomTables() {
+        logger.info("get All Custom Tables");
         return ResponseEntity.ok(customTableService.findAll());
     }
     @GetMapping("/attributes/{id}")
-    public ResponseEntity<List<CustomTableAttributes>> getAllAttributesByTableId(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(customTableAttributesRepository.findByCustomTable(id));
+    public ResponseEntity<List<CustomTableAttribute>> getAllAttributesByTableId(@PathVariable(name = "id") final Long id) {
+        return ResponseEntity.ok(customTableAttributeRepository.findByCustomTable(id));
     }
 
     @GetMapping("/customTable/{id}")
-    public ResponseEntity<List<CustomTableAttributes>> getAllAttributesByTable(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(customTableAttributesRepository.findByCustomTable(id));
+    public ResponseEntity<List<CustomTableAttribute>> getAllAttributesByTable(@PathVariable(name = "id") final Long id) {
+        return ResponseEntity.ok(customTableAttributeRepository.findByCustomTable(id));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomTableDTO> getCustomTable(@PathVariable(name = "id") final Long id) {
+        logger.info("get Custom Table by id: {}", id );
         return ResponseEntity.ok(customTableService.get(id));
     }
 
@@ -58,14 +64,19 @@ public class CustomTableResource {
     @ApiResponse(responseCode = "201")
     public ResponseEntity<Long> createCustomTable(
             @RequestBody @Valid final CustomTableDTO customTableDTO) {
+        logger.info("Create Custom Table {}", customTableDTO );
         final Long createdId = customTableService.create(customTableDTO);
+        logger.info("Created Custom Table {}", createdId);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateCustomTable(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final CustomTableDTO customTableDTO) {
+        logger.info("Update Create Custom Table {}", customTableDTO );
         customTableService.update(id, customTableDTO);
+        logger.info("Updated Create Custom Table {}", customTableDTO );
+
         return ResponseEntity.ok(id);
     }
 
@@ -80,11 +91,11 @@ public class CustomTableResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/customTableAttributesValues")
-    public ResponseEntity<Map<Long, String>> getCustomTableAttributesValues() {
-        return ResponseEntity.ok(customTableAttributesRepository.findAll(Sort.by("id"))
+    @GetMapping("/customTableAttributeValues")
+    public ResponseEntity<Map<Long, String>> getCustomTableAttributeValues() {
+        return ResponseEntity.ok(customTableAttributeRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(CustomTableAttributes::getId, CustomTableAttributes::getNameAttribute)));
+                .collect(CustomCollectors.toSortedMap(CustomTableAttribute::getId, CustomTableAttribute::getNameAttribute)));
     }
 
     @GetMapping("/projectSettingValues")

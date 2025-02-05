@@ -6,8 +6,8 @@ import {ErrorHandler} from 'app/common/error-handler.injectable';
 import {CustomTableService} from 'app/core/custom-table/custom-table.service';
 import {CustomTableDTO} from 'app/core/custom-table/custom-table.model';
 import {environment} from "../../../environments/environment";
-import {CustomTableAttributesDTO} from "../custom-table-attributes/custom-table-attributes.model";
-import {CustomTableAttributesService} from "../custom-table-attributes/custom-table-attributes.service";
+import {CustomTableAttributeDTO} from "../custom-table-attributes/custom-table-attributes.model";
+import {CustomTableAttributeService} from "../custom-table-attributes/custom-table-attributes.service";
 
 
 @Component({
@@ -41,8 +41,8 @@ export class CustomTableListComponent implements OnInit, OnDestroy {
     });
   }
 
-  customTableAttributesDTOs: CustomTableAttributesDTO[] = [];
-  customTableAttributesService = new CustomTableAttributesService();
+  customTableAttributeDTOs: CustomTableAttributeDTO[] = [];
+  customTableAttributeService = new CustomTableAttributeService();
 
   ngOnDestroy() {
     this.navigationSubscription!.unsubscribe();
@@ -60,11 +60,11 @@ export class CustomTableListComponent implements OnInit, OnDestroy {
             if (customTable.customTablesAttributes)
               customTable.customTablesAttributes.forEach((customTableAttribute) => {
                 if (customTableAttribute) {
-                  this.customTableAttributesService.getCustomTableAttributes(customTableAttribute).subscribe({
+                  this.customTableAttributeService.getCustomTableAttribute(customTableAttribute).subscribe({
                     next: (data) => {
-                      console.log("this.customTableAttributesDTOs");
+                      console.log("this.customTableAttributeDTOs");
                       console.log(data);
-                      this.customTableAttributesDTOs.push(data);
+                      this.customTableAttributeDTOs.push(data);
                       console.log(data);
                     },
                     error: error => {
