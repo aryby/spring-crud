@@ -11,13 +11,15 @@ import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class CustomTableService {
-
+private  final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final CustomTableRepository customTableRepository;
     private final CustomTableAttributeRepository customTableAttributeRepository;
     private final ProjectSettingsRepository projectSettingRepository;
@@ -34,7 +36,8 @@ public class CustomTableService {
     }
 
     public List<CustomTableAttribute>findAllAttributesByTableId(Long id){
-        return customTableAttributeRepository.findByCustomTable(id);
+        logger.info("customTableAttributeRepository.findAllByCustomTable({}) called", id);
+        return customTableAttributeRepository.findAllByCustomTable(id);
     }
 
     public List<CustomTableDTO> findAll() {
@@ -73,7 +76,7 @@ public class CustomTableService {
         customTableDTO.setName(customTable.getName());
        customTableDTO.setCustomTablesAttributes(
            customTableAttributeRepository.
-               findByCustomTable(customTable.getId()));
+               findAllByCustomTable(customTable.getId()));
         return customTableDTO;
     }
 

@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 public class CustomTableAttributeService {
 
     private final CustomTableAttributeRepository customTableAttributeRepository;
-    private final CustomTableRepository customTableRepository;
 
     public CustomTableAttributeService(
             final CustomTableAttributeRepository customTableAttributeRepository,
             final CustomTableRepository customTableRepository) {
         this.customTableAttributeRepository = customTableAttributeRepository;
-        this.customTableRepository = customTableRepository;
     }
 
     public List<CustomTableAttributeDTO> findAll() {
@@ -28,7 +26,7 @@ public class CustomTableAttributeService {
     }
 
     public List<CustomTableAttributeDTO> findAllByTableId(final Long tableId) {
-        final List<CustomTableAttribute> customTableAttributees = customTableAttributeRepository.findByCustomTable(tableId);
+        final List<CustomTableAttribute> customTableAttributees = customTableAttributeRepository.findAllByCustomTable(tableId);
         return customTableAttributees.stream()
             .map(customTableAttribute -> mapToDTO(customTableAttribute, new CustomTableAttributeDTO()))
             .toList();

@@ -27,15 +27,12 @@ import org.springframework.web.bind.annotation.*;
 public class CustomTableResource {
 
     private final CustomTableService customTableService;
-    private final CustomTableAttributeRepository customTableAttributeRepository;
     private final ProjectSettingsRepository projectSettingRepository;
     private final Logger logger = LoggerFactory.getLogger(CustomTableResource.class);
 
     public CustomTableResource(final CustomTableService customTableService,
-            final CustomTableAttributeRepository customTableAttributeRepository,
             final ProjectSettingsRepository projectSettingRepository) {
         this.customTableService = customTableService;
-        this.customTableAttributeRepository = customTableAttributeRepository;
         this.projectSettingRepository = projectSettingRepository;
     }
 
@@ -46,12 +43,13 @@ public class CustomTableResource {
     }
     @GetMapping("/attributes/{id}")
     public ResponseEntity<List<CustomTableAttribute>> getAllAttributesByTableId(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(customTableAttributeRepository.findByCustomTable(id));
+        return ResponseEntity.ok(customTableService.findAllAttributesByTableId(id));
     }
 
     @GetMapping("/customTable/{id}")
     public ResponseEntity<List<CustomTableAttribute>> getAllAttributesByTable(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(customTableAttributeRepository.findByCustomTable(id));
+        logger.info("Get All Custom Table Attributes by Table id {} ",id);
+        return ResponseEntity.ok(customTableService.findAllAttributesByTableId(id));
     }
 
     @GetMapping("/{id}")
@@ -91,12 +89,6 @@ public class CustomTableResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/customTableAttributeValues")
-    public ResponseEntity<Map<Long, String>> getCustomTableAttributeValues() {
-        return ResponseEntity.ok(customTableAttributeRepository.findAll(Sort.by("id"))
-                .stream()
-                .collect(CustomCollectors.toSortedMap(CustomTableAttribute::getId, CustomTableAttribute::getNameAttribute)));
-    }
 
     @GetMapping("/projectSettingValues")
     public ResponseEntity<Map<Long, Long>> getprojectSettingValues() {
