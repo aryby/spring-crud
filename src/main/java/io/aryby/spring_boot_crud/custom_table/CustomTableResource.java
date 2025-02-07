@@ -41,6 +41,7 @@ public class CustomTableResource {
         logger.info("get All Custom Tables");
         return ResponseEntity.ok(customTableService.findAll());
     }
+
     @GetMapping("/attributes/{id}")
     public ResponseEntity<List<CustomTableAttribute>> getAllAttributesByTableId(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(customTableService.findAllAttributesByTableId(id));

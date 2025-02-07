@@ -9,6 +9,7 @@ import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IEntityGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class EntityGeneratorImpl implements IEntityGenerator {
                 @EntityListeners(AuditingEntityListener.class)
                 @Getter
                 @Setter
-                """.formatted(table.getName().toLowerCase() + "s"));
+                """.formatted(CapitalizeFirstChar.capitalizeFirstLetter(table.getName().toLowerCase()) + "s"));
 
         sb.append("public class ").append(table.getName()).append(" {\n");
 

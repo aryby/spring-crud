@@ -2,7 +2,6 @@ package io.aryby.spring_boot_crud.project_settings;
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
 import io.aryby.spring_boot_crud.custom_table.CustomTableRepository;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeDTO;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeService;
 import io.aryby.spring_boot_crud.database_settings.DatabaseSettings;
 import io.aryby.spring_boot_crud.database_settings.DatabaseSettingsRepository;
@@ -10,10 +9,8 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferences;
 import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepository;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
-import io.aryby.spring_boot_crud.generator.IEntityGenerator;
-import io.aryby.spring_boot_crud.generator.IMainGenerator;
-import io.aryby.spring_boot_crud.generator.IPomGenerator;
-import io.aryby.spring_boot_crud.generator.IRessourcesGenerator;
+import io.aryby.spring_boot_crud.generator.*;
+import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 
 import java.io.ByteArrayOutputStream;
@@ -41,6 +38,8 @@ public class ProjectSettingService {
     private final CustomTableRepository customTableRepository;
     private final CustomTableAttributeService customTableAttributeService;
     private final IEntityGenerator entityGenerator;
+    private final IRepositoryGenerator interfaceGenerator;
+    private final IControllerGenerator controllerGenerator;
     private final IMainGenerator mainGenerator;
     private final IPomGenerator generatePomXml;
 
@@ -50,10 +49,14 @@ public class ProjectSettingService {
                                  final DeveloperPreferencesRepository developerPreferencesRepository,
                                  final CustomTableRepository customTableRepository,
                                  final CustomTableAttributeService customTableAttributeService,
+                                 final IRepositoryGenerator interfaceGenerator,
+                                 final IControllerGenerator controllerGenerator,
                                  final IEntityGenerator entityGenerator, IMainGenerator mainGenerator, IPomGenerator generatePomXml) {
         this.projectSettingRepository = projectSettingRepository;
+        this.controllerGenerator = controllerGenerator;
         this.customTableAttributeService = customTableAttributeService;
         this.generalSettingsRepository = generalSettingsRepository;
+        this.interfaceGenerator = interfaceGenerator;
         this.databaseSettingsRepository = databaseSettingsRepository;
         this.developerPreferencesRepository = developerPreferencesRepository;
         this.customTableRepository = customTableRepository;
@@ -174,6 +177,23 @@ public class ProjectSettingService {
         for (CustomTable table : tables) {
             String classContent = entityGenerator.generateJavaClass(table, projectId);
             ZipEntry zipEntry = new ZipEntry(srcMainJava + "entities/" + table.getName() + ".java");
+            zipOut.putNextEntry(zipEntry);
+            zipOut.write(classContent.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // Add Repository class files
+        for (CustomTable table : tables) {
+            String classContent = interfaceGenerator.generate(table, projectId);
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "repositories/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository.java");
+            zipOut.putNextEntry(zipEntry);
+            zipOut.write(classContent.getBytes());
+            zipOut.closeEntry();
+        }
+        // Add Controller class files
+        for (CustomTable table : tables) {
+            String classContent = controllerGenerator.generate(table, projectId);
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "controllers/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Controller.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
