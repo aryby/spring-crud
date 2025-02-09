@@ -39,9 +39,13 @@ public class ProjectSettingService {
     private final CustomTableAttributeService customTableAttributeService;
     private final IEntityGenerator entityGenerator;
     private final IRepositoryGenerator interfaceGenerator;
+    private final IDTOGenerator dtoGenerator;
+    private final IServiceGenerator serviceGenerator;
     private final IControllerGenerator controllerGenerator;
     private final IMainGenerator mainGenerator;
+    private final IRequestGenerator requestGenerator;
     private final IPomGenerator generatePomXml;
+
 
     public ProjectSettingService(final ProjectSettingsRepository projectSettingRepository,
                                  final GeneralSettingsRepository generalSettingsRepository,
@@ -51,6 +55,10 @@ public class ProjectSettingService {
                                  final CustomTableAttributeService customTableAttributeService,
                                  final IRepositoryGenerator interfaceGenerator,
                                  final IControllerGenerator controllerGenerator,
+                                 final IDTOGenerator dtoGenerator,
+                                 final IServiceGenerator serviceGenerator,
+                                 final IRequestGenerator requestGenerator,
+
                                  final IEntityGenerator entityGenerator, IMainGenerator mainGenerator, IPomGenerator generatePomXml) {
         this.projectSettingRepository = projectSettingRepository;
         this.controllerGenerator = controllerGenerator;
@@ -63,6 +71,10 @@ public class ProjectSettingService {
         this.entityGenerator = entityGenerator;
         this.mainGenerator = mainGenerator;
         this.generatePomXml = generatePomXml;
+        this.dtoGenerator = dtoGenerator;
+        this.requestGenerator =  requestGenerator;
+        this.serviceGenerator =  serviceGenerator;
+
     }
 
     public List<ProjectSettingsDTO> findAll() {
@@ -190,6 +202,34 @@ public class ProjectSettingService {
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
         }
+
+        // Add DTO class files
+        for (CustomTable table : tables) {
+            String classContent = dtoGenerator.generateDTOClass(table, projectId);
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "dtos/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "DTO.java");
+            zipOut.putNextEntry(zipEntry);
+            zipOut.write(classContent.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // Add SERVIces class files
+        for (CustomTable table : tables) {
+            String classContent = serviceGenerator.generate(table, projectId);
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "services/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service.java");
+            zipOut.putNextEntry(zipEntry);
+            zipOut.write(classContent.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // Add Requests class files
+        for (CustomTable table : tables) {
+            String classContent = requestGenerator.generateRequestClass(table, projectId);
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "requests/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Request.java");
+            zipOut.putNextEntry(zipEntry);
+            zipOut.write(classContent.getBytes());
+            zipOut.closeEntry();
+        }
+
         // Add Controller class files
         for (CustomTable table : tables) {
             String classContent = controllerGenerator.generate(table, projectId);

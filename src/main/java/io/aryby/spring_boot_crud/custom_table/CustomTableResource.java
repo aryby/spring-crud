@@ -73,11 +73,14 @@ public class CustomTableResource {
     public ResponseEntity<Long> updateCustomTable(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final CustomTableDTO customTableDTO) {
         logger.info("Update Create Custom Table {}", customTableDTO );
+
         customTableService.update(id, customTableDTO);
         logger.info("Updated Create Custom Table {}", customTableDTO );
 
         return ResponseEntity.ok(id);
     }
+
+
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")

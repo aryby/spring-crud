@@ -48,9 +48,19 @@ public class RepositoryGeneratorImpl implements IRepositoryGenerator {
             .append(generalSettings.getArtifactId()).append(".repositories;\n\n");
 
         String serviceFormatedName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository";
+
+        sb.append("import ")
+            .append(generalSettings.getGroupId())
+            .append(".")
+            .append(generalSettings.getArtifactId())
+            .append(".entities.")
+            .append(table.getName())
+            .append(";\n");
+
         sb.append("""
-            import org.springframework.data.jpa.repository.JpaRepository;\n
-            import org.springframework.stereotype.Repository;\n
+            import java.util.Optional;
+            import org.springframework.data.jpa.repository.JpaRepository;
+            import org.springframework.stereotype.Repository;
 
             @Repository
             """);
@@ -64,13 +74,13 @@ public class RepositoryGeneratorImpl implements IRepositoryGenerator {
         List<CustomTableAttributeDTO> attributes = customTableAttributeService.findAllByTableId(table.getId());
 
         for (CustomTableAttributeDTO attr : attributes) {
-            sb.append("    public ").append(attr.getNameTypeModifier()).append(" ")
-                .append("findFirstBy")
-                .append(attr.getNameAttribute())
+            sb.append("    Optional<").append(table.getName()).append(" ")
+                .append(">findFirstBy")
+                .append(CapitalizeFirstChar.capitalizeFirstLetter(attr.getNameAttribute()))
                 .append("(")
                 .append(attr.getNameTypeModifier())
                 .append(" ")
-                .append(attr.getNameAttribute())
+                .append(CapitalizeFirstChar.lowerCaseFirstLetter(attr.getNameAttribute()))
                 .append(")").
                 append(";\n");
         }

@@ -4,7 +4,8 @@ public interface IRessourcesGenerator {
 
     default String generateRessources(){
         return "" +
-            "spring.datasource.url=${JDBC_DATABASE_URL\\:jdbc\\:mysql\\://localhost\\:3306/spring-boot-crud?serverTimezone\\=UTC}\n" +
+            "server.port=8090\n"+
+            "spring.datasource.url=${JDBC_DATABASE_URL\\:jdbc\\:mysql\\://localhost\\:3306/spring-generator?serverTimezone\\=UTC}\n" +
             "spring.datasource.username=${JDBC_DATABASE_USERNAME\\:root}\n" +
             "spring.datasource.password=${JDBC_DATABASE_PASSWORD\\:root}\n" +
             "spring.datasource.hikari.connection-timeout=30000\n" +

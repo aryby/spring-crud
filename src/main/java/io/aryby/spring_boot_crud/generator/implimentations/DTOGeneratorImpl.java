@@ -1,4 +1,4 @@
-package io.aryby.spring_boot_crud.generator.impl;
+package io.aryby.spring_boot_crud.generator.implimentations;
 
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
@@ -6,6 +6,7 @@ import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeDTO
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeService;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
+import io.aryby.spring_boot_crud.generator.IDTOGenerator;
 import io.aryby.spring_boot_crud.generator.IEntityGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
@@ -15,23 +16,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service  // Register as a Spring Bean
-public class EntityGeneratorImpl implements IEntityGenerator {
+public class DTOGeneratorImpl implements IDTOGenerator {
 
     private final ProjectSettingsRepository projectSettingsRepository;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final CustomTableAttributeService customTableAttributeService;
 
     // ✅ Constructor Injection
-    public EntityGeneratorImpl(ProjectSettingsRepository projectSettingsRepository,
-                               GeneralSettingsRepository generalSettingsRepository,
-                               CustomTableAttributeService customTableAttributeService) {
+    public DTOGeneratorImpl(ProjectSettingsRepository projectSettingsRepository,
+                            GeneralSettingsRepository generalSettingsRepository,
+                            CustomTableAttributeService customTableAttributeService) {
         this.projectSettingsRepository = projectSettingsRepository;
         this.generalSettingsRepository = generalSettingsRepository;
         this.customTableAttributeService = customTableAttributeService;
     }
 
     @Override
-    public String generateJavaClass(CustomTable table, Long projectId) {
+    public String generateDTOClass(CustomTable table, Long projectId) {
         System.out.println("Generating Java Class for: " + table.getName());
 
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
@@ -43,34 +44,26 @@ public class EntityGeneratorImpl implements IEntityGenerator {
         StringBuilder sb = new StringBuilder();
 
         sb.append("package ").append(generalSettings.getGroupId()).append(".")
-            .append(generalSettings.getArtifactId()).append(".entities;\n\n");
+            .append(generalSettings.getArtifactId()).append(".dtos;\n\n");
 
         sb.append("""
-                import jakarta.persistence.*;
-                import java.time.OffsetDateTime;
-                import lombok.*;
-                import org.springframework.data.annotation.CreatedDate;
-                import org.springframework.data.annotation.LastModifiedDate;
-                import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+                    import jakarta.persistence.*;
+                    import lombok.*;
+                    import java.time.OffsetDateTime;
 
-                @Entity
-                @Table(name = "%s")
-                @EntityListeners(AuditingEntityListener.class)
-                @Getter
-                @Setter
-                @NoArgsConstructor
-                @AllArgsConstructor
-                @Builder
-                """.formatted(CapitalizeFirstChar.lowerCaseFirstLetter(table.getName().toLowerCase()) + "s"));
 
-        sb.append("public class ").append(table.getName()).append(" {\n");
+                    @Getter
+                    @Setter
+                    @NoArgsConstructor
+                    @AllArgsConstructor
+                    @Builder
+                    """);
+
+        sb.append("public class ").append(table.getName()).append("DTO {\n");
 
         sb.append("""
-                    @Id
-                    @Column(nullable = false, updatable = false)
-                    @GeneratedValue(strategy = GenerationType.IDENTITY)
-                    private Long id;
-                """);
+                private Long id;
+            """);
 
         List<CustomTableAttributeDTO> attributes = customTableAttributeService.findAllByTableId(table.getId());
 
@@ -80,14 +73,8 @@ public class EntityGeneratorImpl implements IEntityGenerator {
         }
 
         sb.append("""
-                    @CreatedDate
-                    @Column(nullable = false, updatable = false)
-                    private OffsetDateTime dateCreated;
-
-                    @LastModifiedDate
-                    @Column(nullable = false)
-                    private OffsetDateTime lastUpdated;
-                """);
+                private OffsetDateTime lastUpdated;
+            """);
 
         sb.append("}");
 

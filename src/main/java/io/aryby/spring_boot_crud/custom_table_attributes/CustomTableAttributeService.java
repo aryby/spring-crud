@@ -1,6 +1,7 @@
 package io.aryby.spring_boot_crud.custom_table_attributes;
 
 import io.aryby.spring_boot_crud.custom_table.CustomTableRepository;
+import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -39,6 +40,13 @@ public class CustomTableAttributeService {
     }
 
     public Long create(final CustomTableAttributeDTO customTableAttributeDTO) {
+
+        if (customTableAttributeDTO.getNameTypeModifier().equalsIgnoreCase("boolean")) {
+
+            if (!customTableAttributeDTO.getNameAttribute().substring(0, 2).equalsIgnoreCase("is")) {
+                customTableAttributeDTO.setNameAttribute("is"+ CapitalizeFirstChar.capitalizeFirstLetter(customTableAttributeDTO.getNameAttribute()));
+            }
+        }
         final CustomTableAttribute customTableAttribute = new CustomTableAttribute();
         mapToEntity(customTableAttributeDTO, customTableAttribute);
         return customTableAttributeRepository.save(customTableAttribute).getId();

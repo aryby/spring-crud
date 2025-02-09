@@ -60,10 +60,16 @@ private  final Logger logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public void update(final Long id, final CustomTableDTO customTableDTO) {
-        final CustomTable customTable = customTableRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        mapToEntity(customTableDTO, customTable);
-        customTableRepository.save(customTable);
+        final CustomTable customTable = formateCustomTable(id, customTableDTO);
+                customTableRepository.save(customTable);
+    }
+    private CustomTable formateCustomTable(final Long id, CustomTableDTO customTableDTO){
+        CustomTable customTbl = customTableRepository.findById(id).orElseThrow(NotFoundException::new);
+
+        if (customTableDTO.getName() !=null){
+            customTbl.setName(customTableDTO.getName());
+        }
+        return customTbl;
     }
 
     public void delete(final Long id) {

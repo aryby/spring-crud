@@ -34,19 +34,21 @@ public class MainGeneratorImpl implements IMainGenerator {
         sb.append("package " + generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ";\n\n");
 
 
-        sb.append("import org.springframework.boot.SpringApplication;\n\n");
-        sb.append("public class ").
-            append("StarterApp").
-            append(" {\n");
-        sb.append("\n");
-        sb.append("public static void main(final String[] args) {")
-            .append("\n")
-            .append("    SpringApplication.run(StarterApp.class, args);")
-            .append("\n")
-            .append("}")
-            .append(";\n");
+        sb.append("""
+            import org.springframework.boot.SpringApplication;
+            import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        sb.append("}");
+
+            @SpringBootApplication
+            public class StarterApp {
+
+                    public static void main(final String[] args) {
+                           SpringApplication.run(StarterApp.class, args);
+                    }
+
+            }
+            """);
+
         return sb.toString();
     }
 }
