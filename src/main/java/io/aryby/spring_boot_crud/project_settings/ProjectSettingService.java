@@ -10,15 +10,12 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepos
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.*;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.generator.date_defaults_generator.IDateTimeGenerator;
+import io.aryby.spring_boot_crud.generator.files_generator.IUploadImage;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import io.aryby.spring_boot_crud.util.UuidGenerator;
 import org.slf4j.Logger;
@@ -35,17 +32,6 @@ public class ProjectSettingService {
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
     private final DeveloperPreferencesRepository developerPreferencesRepository;
-    private final CustomTableRepository customTableRepository;
-    private final CustomTableAttributeService customTableAttributeService;
-    private final IEntityGenerator entityGenerator;
-    private final IRepositoryGenerator interfaceGenerator;
-    private final IDTOGenerator dtoGenerator;
-    private final IServiceGenerator serviceGenerator;
-    private final IControllerGenerator controllerGenerator;
-    private final IMainGenerator mainGenerator;
-    private final IRequestGenerator requestGenerator;
-    private final IPomGenerator generatePomXml;
-
 
     public ProjectSettingService(final ProjectSettingsRepository projectSettingRepository,
                                  final GeneralSettingsRepository generalSettingsRepository,
@@ -58,23 +44,12 @@ public class ProjectSettingService {
                                  final IDTOGenerator dtoGenerator,
                                  final IServiceGenerator serviceGenerator,
                                  final IRequestGenerator requestGenerator,
-
-                                 final IEntityGenerator entityGenerator, IMainGenerator mainGenerator, IPomGenerator generatePomXml) {
+                                 final IUploadImage uploadImage,
+                                 final IEntityGenerator entityGenerator, IMainGenerator mainGenerator, IPomGenerator generatePomXml, IDateTimeGenerator dateTimeGenerator) {
         this.projectSettingRepository = projectSettingRepository;
-        this.controllerGenerator = controllerGenerator;
-        this.customTableAttributeService = customTableAttributeService;
         this.generalSettingsRepository = generalSettingsRepository;
-        this.interfaceGenerator = interfaceGenerator;
         this.databaseSettingsRepository = databaseSettingsRepository;
         this.developerPreferencesRepository = developerPreferencesRepository;
-        this.customTableRepository = customTableRepository;
-        this.entityGenerator = entityGenerator;
-        this.mainGenerator = mainGenerator;
-        this.generatePomXml = generatePomXml;
-        this.dtoGenerator = dtoGenerator;
-        this.requestGenerator =  requestGenerator;
-        this.serviceGenerator =  serviceGenerator;
-
     }
 
     public List<ProjectSettingsDTO> findAll() {
@@ -140,122 +115,6 @@ public class ProjectSettingService {
             .orElseThrow(() -> new NotFoundException("developerPreferences not found"));
         projectSetting.setDeveloperPreferences(developerPreferences.getId());
         return projectSetting;
-    }
-
-
-    public byte[] generateZip(Long projectId) throws IOException {
-        logger.info("generateZip {}", projectId);
-        IRessourcesGenerator ressourcesGenerator = new IRessourcesGenerator() {
-            @Override
-            public String generateRessources() {
-                return IRessourcesGenerator.super.generateRessources();
-            }
-        };
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream);
-
-        ProjectSettings projectSettings = projectSettingRepository.findById(projectId).orElseThrow(() ->
-            new RuntimeException("Project settings not found"));
-
-        List<CustomTable> tables = customTableRepository.findAllByprojectSetting(projectId);
-
-        // Create directory structure
-        logger.info("Create directory structure");
-        logger.info("projectSettings.getGeneralSettings() =  {} ", projectSettings.getGeneralSettings());
-        Optional<GeneralSettings> generalSgs = generalSettingsRepository.findById(projectSettings.getGeneralSettings());
-
-        String basePackage = "";
-        try {
-            logger.info("getting general settings : {}", generalSgs);
-            GeneralSettings generalSettings = generalSgs.get();
-            basePackage = generalSettings.getGroupId().replace(".", "/")
-                + "/" + generalSettings.getArtifactId().replace(".", "/");
-
-        } catch (Exception e) {
-            basePackage="com.example";
-            logger.info("Error general settings : {}", e.getMessage());
-        }
-
-
-        String srcMainJava = "src/main/java/" + basePackage + "/";
-        String srcMainResources = "src/main/resources/";
-
-        String appColnt = mainGenerator.generateSpringBootMain(projectId); // main class spring boot
-        ZipEntry zipEntry1 = new ZipEntry(srcMainJava + "StarterApp.java");
-        zipOut.putNextEntry(zipEntry1);
-        zipOut.write(appColnt.getBytes());
-        zipOut.closeEntry();
-        // Add Java class files
-        for (CustomTable table : tables) {
-            String classContent = entityGenerator.generateJavaClass(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "entities/" + table.getName() + ".java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add Repository class files
-        for (CustomTable table : tables) {
-            String classContent = interfaceGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "repositories/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository.java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add DTO class files
-        for (CustomTable table : tables) {
-            String classContent = dtoGenerator.generateDTOClass(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "dtos/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "DTO.java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add SERVIces class files
-        for (CustomTable table : tables) {
-            String classContent = serviceGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "services/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service.java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add Requests class files
-        for (CustomTable table : tables) {
-            String classContent = requestGenerator.generateRequestClass(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "requests/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Request.java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add Controller class files
-        for (CustomTable table : tables) {
-            String classContent = controllerGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "controllers/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Controller.java");
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(classContent.getBytes());
-            zipOut.closeEntry();
-        }
-
-        // Add pom.xml
-        String pomContent = generatePomXml.generatePomXml(projectSettings);
-        ZipEntry pomEntry = new ZipEntry("pom.xml");
-        zipOut.putNextEntry(pomEntry);
-        zipOut.write(pomContent.getBytes());
-        zipOut.closeEntry();
-
-        // add ressources
-        String propertiesContent = ressourcesGenerator.generateRessources();
-        ZipEntry propertiesEntry = new ZipEntry(srcMainResources + "application.properties");
-        zipOut.putNextEntry(propertiesEntry);
-        zipOut.write(propertiesContent.getBytes());
-        zipOut.closeEntry();
-
-
-        zipOut.close();
-        return byteArrayOutputStream.toByteArray();
     }
 
 

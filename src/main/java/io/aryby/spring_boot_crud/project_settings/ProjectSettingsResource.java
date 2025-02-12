@@ -6,6 +6,9 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferences;
 import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepository;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
+import io.aryby.spring_boot_crud.generator.IGenerateZip;
+import io.aryby.spring_boot_crud.generator.implimentations.IGenerateBackendZipImpl;
+import io.aryby.spring_boot_crud.generator.implimentations.IGenerateFrontendZipImpl;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -16,6 +19,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,15 +37,21 @@ public class ProjectSettingsResource {
     private final GeneralSettingsRepository generalSettingsRepository;
     private final DatabaseSettingsRepository databaseSettingsRepository;
     private final DeveloperPreferencesRepository developerPreferencesRepository;
+    private final IGenerateZip generateBackendZip;
+    private final IGenerateZip generateFrontendZip;
 
     public ProjectSettingsResource(final ProjectSettingService projectSettingService,
-            final GeneralSettingsRepository generalSettingsRepository,
-            final DatabaseSettingsRepository databaseSettingsRepository,
-            final DeveloperPreferencesRepository developerPreferencesRepository) {
+                                   final GeneralSettingsRepository generalSettingsRepository,
+                                   final DatabaseSettingsRepository databaseSettingsRepository,
+                                   final DeveloperPreferencesRepository developerPreferencesRepository,
+                                   @Qualifier("IGenerateBackendZipImpl") IGenerateZip generateBackendZip,
+                                   @Qualifier("IGenerateFrontendZipImpl") IGenerateZip generateFrontendZip) {
         this.projectSettingService = projectSettingService;
         this.generalSettingsRepository = generalSettingsRepository;
         this.databaseSettingsRepository = databaseSettingsRepository;
         this.developerPreferencesRepository = developerPreferencesRepository;
+        this.generateBackendZip = generateBackendZip;
+        this.generateFrontendZip = generateFrontendZip;
     }
 
     @GetMapping
@@ -88,9 +98,17 @@ public class ProjectSettingsResource {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/download/{id}")
-    public byte[] generateZip(@PathVariable(name = "id") final Long id) throws IOException {
+    public byte[] generateBackZip(@PathVariable(name = "id") final Long id) throws IOException {
         logger.info("Generate zip file: {}", id);
-        return projectSettingService.generateZip(id);
+        //return generateFrontendZip.generateZip(id);
+        return generateBackendZip.generateZip(id);
+    }
+
+    @GetMapping("/download/front/{id}")
+    public byte[] generateFontZip(@PathVariable(name = "id") final Long id) throws IOException {
+        logger.info("Generate zip file: {}", id);
+        return generateFrontendZip.generateZip(id);
+        //return generateBackendZip.generateZip(id);
     }
 
     @GetMapping("/generalSettingsValues")

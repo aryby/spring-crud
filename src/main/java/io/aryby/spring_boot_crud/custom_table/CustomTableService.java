@@ -6,6 +6,7 @@ import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttribute;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeRepository;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
+import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
 import io.aryby.spring_boot_crud.util.NotFoundException;
 import io.aryby.spring_boot_crud.util.ReferencedWarning;
 import java.util.List;
@@ -54,6 +55,7 @@ private  final Logger logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public Long create(final CustomTableDTO customTableDTO) {
+        customTableDTO.setName(CapitalizeFirstChar.capitalizeFirstLetter(customTableDTO.getName()));
         final CustomTable customTable = new CustomTable();
         mapToEntity(customTableDTO, customTable);
         return customTableRepository.save(customTable).getId();

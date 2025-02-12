@@ -101,28 +101,15 @@ public class ServiceGeneratorImpl implements IServiceGenerator {
 
             @Service
             """);
-        sb.append("public class ").
-            append(SERVICE_MODEL).
-            append(" {\n");
+        sb.append("public class ").append(SERVICE_MODEL).append(" {\n");
         // private finale EntityRepository entityRepository;
-        sb.append("    private final  ").
-            append(REPOS_DI).
-            append(" ").
-            append(REPO_DI_LOWER).
-            append("; \n");
+        sb.append("    private final  ").append(REPOS_DI).append(" ").append(REPO_DI_LOWER).append("; \n");
 
         // DI
-        sb.append("\n    public ").
-            append(SERVICE_MODEL).
-            append("(final ").
-            append(REPOS_DI).
-            append(" ").
-            append(REPO_DI_LOWER).
-            append(") {\n ");
+        sb.append("\n    public ").append(SERVICE_MODEL).append("(final ").append(REPOS_DI).append(" ").append(REPO_DI_LOWER).append(") {\n ");
 
         sb.append("     this." + REPO_DI_LOWER + " = " + REPO_DI_LOWER + ";\n" +
             "    }").append("\n\n");
-        sb.append("\n");
 
         // get all
         List<CustomTableAttributeDTO> attributes = customTableAttributeService.findAllByTableId(table.getId());
