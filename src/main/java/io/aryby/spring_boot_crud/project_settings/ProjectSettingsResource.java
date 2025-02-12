@@ -99,16 +99,14 @@ public class ProjectSettingsResource {
     }
     @GetMapping("/download/{id}")
     public byte[] generateBackZip(@PathVariable(name = "id") final Long id) throws IOException {
-        logger.info("Generate zip file: {}", id);
-        //return generateFrontendZip.generateZip(id);
+        logger.info("Generate backend zip file: {}", id);
         return generateBackendZip.generateZip(id);
     }
 
     @GetMapping("/download/front/{id}")
     public byte[] generateFontZip(@PathVariable(name = "id") final Long id) throws IOException {
-        logger.info("Generate zip file: {}", id);
+        logger.info("Generate front end zip file: {}", id);
         return generateFrontendZip.generateZip(id);
-        //return generateBackendZip.generateZip(id);
     }
 
     @GetMapping("/generalSettingsValues")
