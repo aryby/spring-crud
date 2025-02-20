@@ -37,11 +37,6 @@
                         <div [@slideDownUp]="!activeDropdown.includes('dashboard')" class="accordion-content">
                             <ul class="sub-menu text-gray-500">
                                 <li>
-                                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleMobileMenu()"
-                                        >{{ 'sales' | translate }}</a
-                                    >
-                                </li>
-                                <li>
                                     <a routerLink="/analytics" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'analytics' | translate }}</a>
                                 </li>
                             </ul>
@@ -62,17 +57,6 @@
 
                                         <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark"
                                             >{{ 'chat' | translate }}</span
-                                        >
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a routerLink="/apps/mailbox" class="group" routerLinkActive="active" (click)="toggleMobileMenu()">
-                                    <div class="flex items-center">
-                                        <icon-menu-mailbox class="shrink-0 group-hover:!text-primary" />
-
-                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark"
-                                            >{{ 'mailbox' | translate }}</span
                                         >
                                     </div>
                                 </a>
@@ -131,7 +115,7 @@
                     </h2>
 
                     <li class="menu nav-item">
-                        <a href="https://vristo.sbthemes.com" target="_blank" class="nav-link group">
+                        <a href="#" class="nav-link group">
                             <div class="flex items-center">
                                 <icon-menu-documentation class="shrink-0 group-hover:!text-primary" />
 

@@ -1,64 +1,38 @@
-# SpringBootCrud
+## To download and generate zip
+### In ProjectSettingsResource :
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
+- for FrontEnd generate zip (angular)
 
-## Development
+        @GetMapping("/download/front/{id}")
+            public byte[] generateFontZip(@PathVariable(name = "id") final Long id) throws IOException {
+            logger.info("Generate front end zip file: {}", id);
+            return generateFrontendZip.generateZip(id);
+        }
+  - for FrontEnd generate zip (angular)
 
-Update your local database connection in `application.properties` or create your own `application-local.properties` file to override
-settings for development.
+          @GetMapping("/generalSettingsValues")
+          public ResponseEntity<Map<Long, Long>> getGeneralSettingsValues() {
+              return ResponseEntity.ok(generalSettingsRepository.findAll(Sort.by("id"))
+                      .stream()
+                      .collect(CustomCollectors.toSortedMap(GeneralSettings::getId, GeneralSettings::getId)));
+          }
+    - Injections
 
-During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be
-added in the VM options of the Run Configuration after enabling this property in "Modify options".
-
-Lombok must be supported by your IDE. For IntelliJ install the Lombok plugin and enable annotation processing -
-[learn more](https://bootify.io/next-steps/spring-boot-with-lombok.html).
-
-In addition to the Spring Boot application, the development server must also be started - for this
-[Node.js](https://nodejs.org/) version 22 is required. Angular CLI and required dependencies must be installed once:
-
-```
-npm install -g @angular/cli
-npm install
-```
-
-The development server can be started as follows:
-
-```
-ng serve
-```
-
-Your application is now accessible under `localhost:4200`.
-
-Add code using Angular schematics with `ng generate ...`.
-Frontend unit tests can be executed with `ng test`.
-Generate a messages.json for translation with `ng extract-i18n --format=json`.
-
-## Build
-
-The application can be built using the following command:
-
-```
-mvnw clean package
-```
-
-Start your application with the following command - here with the profile `production`:
-
-```
-java -Dspring.profiles.active=production -jar ./target/spring-boot-crud-0.0.1-SNAPSHOT.jar
-```
-
-If required, a Docker image can be created with the Spring Boot plugin. Add `SPRING_PROFILES_ACTIVE=production` as
-environment variable when running the container.
-
-```
-mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=io.aryby/spring-boot-crud
-```
-
-## Further readings
-
-* [Maven docs](https://maven.apache.org/guides/index.html)  
-* [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)  
-* [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/reference/jpa.html)
-* [Learn Angular](https://angular.dev/tutorials/learn-angular)  
-* [Angular CLI](https://angular.dev/tools/cli)
-* [Tailwind CSS](https://tailwindcss.com/)  
+              private final IGenerateZip generateBackendZip;
+              private final IGenerateZip generateFrontendZip;
+        
+              public ProjectSettingsResource(final ProjectSettingService projectSettingService,
+                  final GeneralSettingsRepository generalSettingsRepository,
+                  final DatabaseSettingsRepository databaseSettingsRepository,
+                  final DeveloperPreferencesRepository developerPreferencesRepository,
+                  @Qualifier("IGenerateBackendZipImpl") IGenerateZip generateBackendZip,
+                  @Qualifier("IGenerateFrontendZipImpl") IGenerateZip generateFrontendZip
+                ) {
+  
+                      this.projectSettingService = projectSettingService;
+                      this.generalSettingsRepository = generalSettingsRepository;
+                      this.databaseSettingsRepository = databaseSettingsRepository;
+                      this.developerPreferencesRepository = developerPreferencesRepository;
+                      this.generateBackendZip = generateBackendZip;
+                      this.generateFrontendZip = generateFrontendZip;
+              }

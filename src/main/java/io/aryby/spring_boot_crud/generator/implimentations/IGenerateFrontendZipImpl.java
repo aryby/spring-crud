@@ -36,6 +36,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
     private final IAngularAppModuleRoutingTs appModuleRoutingTs;
     private final IAngularServiceGenerator angularServiceGenerator;
 
+    private final IAngularComponentsGenerator angularComponentsGenerator;
     private final IModelGenerator modelGenerator;
 
     public IGenerateFrontendZipImpl(ProjectSettingsRepository projectSettingRepository,
@@ -43,7 +44,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
                                     CustomTableRepository customTableRepository,
                                     IAngularAppModuleTs angularAppModule,
                                     IAngularAppComponent angularAppComponent,
-                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IModelGenerator modelGenerator) {
+                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IAngularComponentsGenerator angularComponentsGenerator, IModelGenerator modelGenerator) {
         this.projectSettingRepository = projectSettingRepository;
         this.generalSettingsRepository = generalSettingsRepository;
         this.customTableRepository = customTableRepository;
@@ -51,6 +52,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         this.angularAppComponent = angularAppComponent;
         this.appModuleRoutingTs = appModuleRoutingTs;
         this.angularServiceGenerator = angularServiceGenerator;
+        this.angularComponentsGenerator = angularComponentsGenerator;
         this.modelGenerator = modelGenerator;
     }
 
@@ -138,6 +140,27 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         zipOut.putNextEntry(MODULE_PATH);
         zipOut.write(MODULL_APP.getBytes());
         zipOut.closeEntry();
+
+        // generate list ts component
+        for (CustomTable table : tables) {
+            String listComponentTs  = angularComponentsGenerator.generateAngularComponentsTs(table, projectId);
+            ZipEntry entry = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + ".component.ts");
+
+            zipOut.putNextEntry(entry);
+            zipOut.write(listComponentTs.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // generate list html component
+        for (CustomTable table : tables) {
+           String listComponentHtml  = angularComponentsGenerator.generateAngularComponentsHtml(table, projectId);
+            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + ".component.html");
+
+            zipOut.putNextEntry(entryhtml);
+            zipOut.write(listComponentHtml.getBytes());
+            zipOut.closeEntry();
+        }
+
 //
 //
 //
