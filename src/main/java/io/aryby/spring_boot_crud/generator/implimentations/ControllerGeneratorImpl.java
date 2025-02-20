@@ -1,19 +1,16 @@
 package io.aryby.spring_boot_crud.generator.implimentations;
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeDTO;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeService;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IControllerGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ControllerGeneratorImpl implements IControllerGenerator {
@@ -47,12 +44,12 @@ public class ControllerGeneratorImpl implements IControllerGenerator {
         logger.info("GeneralSettings found for ID: " + projectId);
 
         // Define class and package names
-        String controllerName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Controller";
-        String serviceName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service";
+        String controllerName = MyHelpper.capitalizeFirstLetter(table.getName()) + "Controller";
+        String serviceName = MyHelpper.capitalizeFirstLetter(table.getName()) + "Service";
         String serviceVariable = table.getName().toLowerCase() + "Service";
-        String dtoName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "DTO";
-        String requestDto = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Request";
-        String entityName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName());
+        String dtoName = MyHelpper.capitalizeFirstLetter(table.getName()) + "DTO";
+        String requestDto = MyHelpper.capitalizeFirstLetter(table.getName()) + "Request";
+        String entityName = MyHelpper.capitalizeFirstLetter(table.getName());
 
         String packageEntity = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".entities";
         String packageService = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".services";

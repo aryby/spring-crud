@@ -7,10 +7,8 @@ import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeSer
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IDTOGenerator;
-import io.aryby.spring_boot_crud.generator.IEntityGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

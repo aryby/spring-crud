@@ -1,4 +1,4 @@
-package io.aryby.spring_boot_crud.generator.impl;
+package io.aryby.spring_boot_crud.generator.implimentations;
 
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
@@ -9,7 +9,7 @@ import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IEntityGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +20,7 @@ public class EntityGeneratorImpl implements IEntityGenerator {
     private final ProjectSettingsRepository projectSettingsRepository;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final CustomTableAttributeService customTableAttributeService;
+
 
     // ✅ Constructor Injection
     public EntityGeneratorImpl(ProjectSettingsRepository projectSettingsRepository,
@@ -61,7 +62,7 @@ public class EntityGeneratorImpl implements IEntityGenerator {
                 @NoArgsConstructor
                 @AllArgsConstructor
                 @Builder
-                """.formatted(CapitalizeFirstChar.lowerCaseFirstLetter(table.getName().toLowerCase()) + "s"));
+                """.formatted(MyHelpper.lowerCaseFirstLetter(table.getName().toLowerCase()) + "s"));
 
         sb.append("public class ").append(table.getName()).append(" {\n");
 

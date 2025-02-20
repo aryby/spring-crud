@@ -8,7 +8,7 @@ import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IRepositoryGenerator;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class RepositoryGeneratorImpl implements IRepositoryGenerator {
         sb.append("package ").append(generalSettings.getGroupId()).append(".")
             .append(generalSettings.getArtifactId()).append(".repositories;\n\n");
 
-        String serviceFormatedName = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository";
+        String serviceFormatedName = MyHelpper.capitalizeFirstLetter(table.getName()) + "Repository";
 
         sb.append("import ")
             .append(generalSettings.getGroupId())
@@ -68,7 +68,7 @@ public class RepositoryGeneratorImpl implements IRepositoryGenerator {
         sb.append("public interface ").
             append(serviceFormatedName).
             append("  extends JpaRepository<");
-        sb.append(CapitalizeFirstChar.capitalizeFirstLetter(table.getName()));
+        sb.append(MyHelpper.capitalizeFirstLetter(table.getName()));
         sb.append(", Long>  {\n");
 
         List<CustomTableAttributeDTO> attributes = customTableAttributeService.findAllByTableId(table.getId());
@@ -76,11 +76,11 @@ public class RepositoryGeneratorImpl implements IRepositoryGenerator {
         for (CustomTableAttributeDTO attr : attributes) {
             sb.append("    Optional<").append(table.getName()).append(" ")
                 .append(">findFirstBy")
-                .append(CapitalizeFirstChar.capitalizeFirstLetter(attr.getNameAttribute()))
+                .append(MyHelpper.capitalizeFirstLetter(attr.getNameAttribute()))
                 .append("(")
                 .append(attr.getNameTypeModifier())
                 .append(" ")
-                .append(CapitalizeFirstChar.lowerCaseFirstLetter(attr.getNameAttribute()))
+                .append(MyHelpper.lowerCaseFirstLetter(attr.getNameAttribute()))
                 .append(")").
                 append(";\n");
         }

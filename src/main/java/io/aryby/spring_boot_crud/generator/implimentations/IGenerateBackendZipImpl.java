@@ -2,7 +2,6 @@ package io.aryby.spring_boot_crud.generator.implimentations;
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
 import io.aryby.spring_boot_crud.custom_table.CustomTableRepository;
-import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeService;
 import io.aryby.spring_boot_crud.database_settings.DatabaseSettingsRepository;
 import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepository;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
@@ -13,7 +12,7 @@ import io.aryby.spring_boot_crud.generator.files_generator.IUploadImage;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingService;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -140,7 +139,7 @@ public class IGenerateBackendZipImpl implements IGenerateZip {
         // Add Repository class files
         for (CustomTable table : tables) {
             String classContent = interfaceGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "repositories/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository.java");
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "repositories/" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Repository.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
@@ -149,7 +148,7 @@ public class IGenerateBackendZipImpl implements IGenerateZip {
         // Add DTO class files
         for (CustomTable table : tables) {
             String classContent = dtoGenerator.generateDTOClass(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "dtos/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "DTO.java");
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "dtos/" + MyHelpper.capitalizeFirstLetter(table.getName()) + "DTO.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
@@ -158,7 +157,7 @@ public class IGenerateBackendZipImpl implements IGenerateZip {
         // Add SERVIces class files
         for (CustomTable table : tables) {
             String classContent = serviceGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "services/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service.java");
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "services/" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Service.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
@@ -167,7 +166,7 @@ public class IGenerateBackendZipImpl implements IGenerateZip {
         // Add Requests class files
         for (CustomTable table : tables) {
             String classContent = requestGenerator.generateRequestClass(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "requests/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Request.java");
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "requests/" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Request.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();
@@ -176,7 +175,7 @@ public class IGenerateBackendZipImpl implements IGenerateZip {
         // Add Controller class files
         for (CustomTable table : tables) {
             String classContent = controllerGenerator.generate(table, projectId);
-            ZipEntry zipEntry = new ZipEntry(srcMainJava + "controllers/" + CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Controller.java");
+            ZipEntry zipEntry = new ZipEntry(srcMainJava + "controllers/" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Controller.java");
             zipOut.putNextEntry(zipEntry);
             zipOut.write(classContent.getBytes());
             zipOut.closeEntry();

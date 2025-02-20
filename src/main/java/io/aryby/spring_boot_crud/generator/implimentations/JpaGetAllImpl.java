@@ -2,7 +2,7 @@ package io.aryby.spring_boot_crud.generator.implimentations;
 
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeDTO;
 import io.aryby.spring_boot_crud.generator.jpa_generator.IJpaGetAll;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class JpaGetAllImpl implements IJpaGetAll {
         sb.append("         return  this.");
         sb.append(REPO_DI_LOWER);
         sb.append(".findAll().stream().map(");
-        sb.append(CapitalizeFirstChar.lowerCaseFirstLetter(ENTITY_MODAL));
+        sb.append(MyHelpper.lowerCaseFirstLetter(ENTITY_MODAL));
         sb.append("-> new ");
         sb.append(DTO_MODAL);
         sb.append("(\n");
@@ -31,9 +31,9 @@ public class JpaGetAllImpl implements IJpaGetAll {
             sb.append("   ").
                 append("                "+ENTITY_MODAL.toLowerCase()).append(".");
             if (attr.getNameTypeModifier().equalsIgnoreCase("boolean")) {
-                sb.append(CapitalizeFirstChar.lowerCaseFirstLetter(attr.getNameAttribute())).append("(),\n");
+                sb.append(MyHelpper.lowerCaseFirstLetter(attr.getNameAttribute())).append("(),\n");
             }else {
-                sb.append("get"+CapitalizeFirstChar.capitalizeFirstLetter(attr.getNameAttribute())).append("(),\n");
+                sb.append("get"+ MyHelpper.capitalizeFirstLetter(attr.getNameAttribute())).append("(),\n");
             }
         }
         sb. append("                   "+ENTITY_MODAL.toLowerCase()).append(".getLastUpdated())");

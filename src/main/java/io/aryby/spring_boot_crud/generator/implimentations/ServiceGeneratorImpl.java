@@ -9,7 +9,7 @@ import io.aryby.spring_boot_crud.generator.IServiceGenerator;
 import io.aryby.spring_boot_crud.generator.jpa_generator.*;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.CapitalizeFirstChar;
+import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -61,18 +61,18 @@ public class ServiceGeneratorImpl implements IServiceGenerator {
             .orElseThrow(() -> new IllegalArgumentException("GeneralSettings not found for ProjectSettings ID: " + projectId));
         logger.info("GeneralSettings found for ID: " + projectId);
         /* fin getting infos*/
-        // String serviceModifier = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service";
-        String REPOS_DI = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository";
+        // String serviceModifier = MyHelpper.capitalizeFirstLetter(table.getName()) + "Service";
+        String REPOS_DI = MyHelpper.capitalizeFirstLetter(table.getName()) + "Repository";
         String REPO_DI_LOWER = table.getName().toLowerCase() + "repository";
         String packageEntity = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".entities";
         String packageRepos = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".repositories";
         String packageRequest = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".requests";
         String packageDto = generalSettings.getGroupId() + "." + generalSettings.getArtifactId() + ".dtos";
-        String ENTITY_MODAL = CapitalizeFirstChar.capitalizeFirstLetter(table.getName());
-        String DTO_MODAL = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "DTO";
-        String REPOSITORY_MODEL = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Repository";
-        String SERVICE_MODEL = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Service";
-        String REQUEST_MODEL = CapitalizeFirstChar.capitalizeFirstLetter(table.getName()) + "Request";
+        String ENTITY_MODAL = MyHelpper.capitalizeFirstLetter(table.getName());
+        String DTO_MODAL = MyHelpper.capitalizeFirstLetter(table.getName()) + "DTO";
+        String REPOSITORY_MODEL = MyHelpper.capitalizeFirstLetter(table.getName()) + "Repository";
+        String SERVICE_MODEL = MyHelpper.capitalizeFirstLetter(table.getName()) + "Service";
+        String REQUEST_MODEL = MyHelpper.capitalizeFirstLetter(table.getName()) + "Request";
 
 
         StringBuilder sb = new StringBuilder();
