@@ -154,7 +154,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         // generate list html component
         for (CustomTable table : tables) {
            String listComponentHtml  = angularComponentsGenerator.generateAngularComponentsHtml(table, projectId);
-            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + ".component.html");
+            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-list.component.html");
 
             zipOut.putNextEntry(entryhtml);
             zipOut.write(listComponentHtml.getBytes());

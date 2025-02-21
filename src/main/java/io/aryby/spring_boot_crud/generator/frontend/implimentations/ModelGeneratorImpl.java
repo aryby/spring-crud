@@ -28,7 +28,7 @@ public class ModelGeneratorImpl implements IModelGenerator {
 
     @Override
     public String generateAngularModel(CustomTable table, Long projectId) {
-        System.out.println("Generating Model Angular: " + table.getName());
+        System.out.println("Generating Angular Model for: " + table.getName());
 
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
             .orElseThrow(() -> new IllegalArgumentException("ProjectSettings not found for ID: " + projectId));
@@ -36,32 +36,32 @@ public class ModelGeneratorImpl implements IModelGenerator {
         GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings())
             .orElseThrow(() -> new IllegalArgumentException("GeneralSettings not found for ProjectSettings ID: " + projectId));
 
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("export class ").append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity {\n");
-
-        sb.append("constructor(data:Partial<").append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity>) {\n").append("""
-                    Object.assign(this, data);
-                    }
-
-                    id?: any;
-                """);
+        String entityName = MyHelpper.capitalizeFirstLetter(table.getName());
 
         List<CustomTableAttributeDTO> attributes = customTableAttributeService.findAllByTableId(table.getId());
 
+        StringBuilder attributesBuilder = new StringBuilder();
         for (CustomTableAttributeDTO attr : attributes) {
-
-                sb.append(attr.getNameAttribute()).append("?: ")
-                    .append(attr.getNameTypeModifier().toLowerCase()).append(";\n");
+            attributesBuilder.append("    ")
+                .append(attr.getNameAttribute())
+                .append("?: ")
+                .append(attr.getNameTypeModifier().toLowerCase())
+                .append(";\n");
         }
 
-        sb.append("""
-                    dateCreated?:any;
-                    lastUpdated?:any;
-                """);
+        return String.format("""
+        export class %1$sEntity {
+            constructor(data: Partial<%1$sEntity>) {
+                Object.assign(this, data);
+            }
 
-        sb.append("}");
-
-        return sb.toString();
+            id?: any;
+        %2$s
+            dateCreated?: any;
+            lastUpdated?: any;
+        }
+        """, entityName, attributesBuilder.toString()
+        );
     }
+
 }

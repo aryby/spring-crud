@@ -46,16 +46,20 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
         sb.append("\nimport { ");
         sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity");
         sb.append(" }");
-        sb.append("from '../models/");
+        sb.append("from '../../models/");
         sb.append(table.getName().toLowerCase()).append(".entity';\n");
 
         sb.append("import { ");
         sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Service");
         sb.append(" }");
-        sb.append("from '../services/");
+        sb.append("from '../../services/");
         sb.append(table.getName().toLowerCase()).append(".service';\n");
 
-        sb.append("@Component({\n       selector: 'app-%s-list',\n".formatted(tableFormatedName));
+        sb.append("""
+                  @Component({
+                    standalone:true,
+                    selector: 'app-%s-list',
+                  """.formatted(tableFormatedName));
         sb.append("       templateUrl: './%s-list.component.html,'\n})\n".formatted(tableFormatedName));
 
 
@@ -65,7 +69,7 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
         sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Service);\n");
 
         sb.append("     router = inject(Router);\n");
-        sb.append("     "+MyHelpper.lowerCaseFirstLetter(table.getName())).append("Entity?= ");
+        sb.append("     "+MyHelpper.lowerCaseFirstLetter(table.getName())).append("Entity?: ");
         sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity[] = []; \n");
         sb.append("     navigationSubscription?: Subscription;\n\n");
         // get all

@@ -27,7 +27,7 @@ public class AngularServiceGeneratorImpl implements IAngularServiceGenerator {
 
     @Override
     public String generateAngularService(CustomTable table, Long projectId) {
-        System.out.println("Generating Service Angular: " + table.getName());
+        System.out.println("Generating Angular Service for: " + table.getName());
 
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
             .orElseThrow(() -> new IllegalArgumentException("ProjectSettings not found for ID: " + projectId));
@@ -35,65 +35,43 @@ public class AngularServiceGeneratorImpl implements IAngularServiceGenerator {
         GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings())
             .orElseThrow(() -> new IllegalArgumentException("GeneralSettings not found for ProjectSettings ID: " + projectId));
 
-        StringBuilder sb = new StringBuilder();
+        String entityName = MyHelpper.capitalizeFirstLetter(table.getName());
+        String entityVar = MyHelpper.lowerCaseFirstLetter(table.getName());
+        String apiUrl = "environment.apiPath + '/api/" + entityName + "s'";
 
-        sb.append("""
-            import { Injectable, inject } from '@angular/core';
-            import { HttpClient } from '@angular/common/http';
-            import { environment } from 'environments/environment';
-            """);
-        sb.append("import { ");
-        sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity");
-        sb.append(" }");
-        sb.append("from '../models/");
-        sb.append(table.getName().toLowerCase()).append(".entity';\n");
-        sb.append("""
+        return String.format("""
+        import { Injectable, inject } from '@angular/core';
+        import { HttpClient } from '@angular/common/http';
+        import { environment } from '../../../environments/environment';
+        import { %1$sEntity } from '../models/%2$s.entity';
 
-            @Injectable({
-              providedIn: 'root',
-            })
-            """);
+        @Injectable({ providedIn: 'root' })
+        export class %1$sService {
+            http = inject(HttpClient);
+            apiUrl = %3$s;
 
-        sb.append("export class ").append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Service {\n");
+            getAll%1$s() {
+                return this.http.get<%1$sEntity[]>(this.apiUrl);
+            }
 
-        sb.append("""
-                http = inject(HttpClient);
+            get%1$sById(id: any) {
+                return this.http.get<%1$sEntity>(`${this.apiUrl}/${id}`);
+            }
 
-            """);
-        sb.append("     apiUrl = environment.apiPath + '/api/" + MyHelpper.capitalizeFirstLetter(table.getName())).append("s';\n\n");
+            create%1$s(%4$s: %1$sEntity) {
+                return this.http.post<%1$sEntity>(this.apiUrl, %4$s);
+            }
 
-        // get all
-        sb.append(" getAll").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("() {\n")
-            .append("return this.http.get<" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity[]>(this.apiUrl);");
-        sb.append("\n\n     }\n");
+            update%1$s(id: any, %2$s: %1$sEntity) {
+                return this.http.put<%1$sEntity>(`${this.apiUrl}/${id}`, %2$s);
+            }
 
-        // get by id
-        sb.append(" get").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("ById(id: any) {\n")
-            .append("return this.http.get<" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity>(this.apiUrl + '/' + id);");
-        sb.append("\n\n     }\n");
-
-        // create
-        sb.append(" create").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("(" +MyHelpper.lowerCaseFirstLetter(table.getName())+" : "+ MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity) {\n")
-            .append("return this.http.post<" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity>(this.apiUrl + '/' + " + MyHelpper.lowerCaseFirstLetter(table.getName()) + ");");
-        sb.append("\n\n     }\n");
-
-        // update
-        sb.append("update").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("(id: any, " + table.getName().toLowerCase() +" : "+ MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity) {\n")
-            .append("return this.http.put<" + MyHelpper.capitalizeFirstLetter(table.getName()) + "Entity>(this.apiUrl + '/id, ' + " + table.getName().toLowerCase()+ ");");
-        sb.append("\n\n     }\n");
-
-        // delete
-        sb.append("delete").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("ById(id: any) {\n")
-            .append("return this.http.delete(this.apiUrl + '/' + id);");
-        sb.append("\n\n     }\n");
-
-        sb.append("}\n");
-
-        return sb.toString();
+            delete%1$sById(id: any) {
+                return this.http.delete(`${this.apiUrl}/${id}`);
+            }
+        }
+        """, entityName, table.getName().toLowerCase(), apiUrl, entityVar
+        );
     }
+
 }
