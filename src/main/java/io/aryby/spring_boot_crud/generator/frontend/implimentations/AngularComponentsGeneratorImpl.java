@@ -25,91 +25,79 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
 
     @Override
     public String generateAngularComponentsTs(CustomTable table, Long projectId) {
-        System.out.println("Generating Components Angular: " + table.getName());
-
+        // Fetch Project and General Settings
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
             .orElseThrow(() -> new IllegalArgumentException("ProjectSettings not found for ID: " + projectId));
 
-        GeneralSettings generalSettings = generalSettingsRepository.findById(projectSetting.getGeneralSettings())
+        generalSettingsRepository.findById(projectSetting.getGeneralSettings())
             .orElseThrow(() -> new IllegalArgumentException("GeneralSettings not found for ProjectSettings ID: " + projectId));
 
+        // Prepare formatted names
+        String tableName = table.getName();
+        String formattedTableName = tableName.toLowerCase();
+        String capitalizedTableName = MyHelpper.capitalizeFirstLetter(tableName);
+        String lowerCaseTableName = MyHelpper.lowerCaseFirstLetter(tableName);
+
+        // Generate component content
         StringBuilder sb = new StringBuilder();
 
-        String tableFormatedName = table.getName().toLowerCase();
-
-
+        // Import statements
         sb.append("""
-            import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-            import { NavigationEnd, Router, RouterLink } from '@angular/router';
-            import { Subscription } from 'rxjs';\n
-            """);
-        sb.append("\nimport { ");
-        sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity");
-        sb.append(" }");
-        sb.append("from '../../models/");
-        sb.append(table.getName().toLowerCase()).append(".entity';\n");
+        import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+        import { NavigationEnd, Router } from '@angular/router';
+        import { Subscription } from 'rxjs';
 
-        sb.append("import { ");
-        sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Service");
-        sb.append(" }");
-        sb.append("from '../../services/");
-        sb.append(table.getName().toLowerCase()).append(".service';\n");
+        import { %sEntity } from '../../models/%s.entity';
+        import { %sService } from '../../services/%s.service';
+        """.formatted(capitalizedTableName, formattedTableName, capitalizedTableName, formattedTableName));
 
+        // Component decorator
         sb.append("""
-                  @Component({
-                    standalone:true,
-                    selector: 'app-%s-list',
-                  """.formatted(tableFormatedName));
-        sb.append("       templateUrl: './%s-list.component.html,'\n})\n".formatted(tableFormatedName));
+        @Component({
+            selector: 'app-%s-list',
+            templateUrl: './%s-list.component.html',
+        })
+        """.formatted(formattedTableName, formattedTableName));
 
-
-        sb.append("export class ").append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Component implements OnInit, OnDestroy  {\n");
-
-        sb.append("\n     "+MyHelpper.lowerCaseFirstLetter(table.getName())).append("Service = inject(");
-        sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Service);\n");
-
-        sb.append("     router = inject(Router);\n");
-        sb.append("     "+MyHelpper.lowerCaseFirstLetter(table.getName())).append("Entity?: ");
-        sb.append(MyHelpper.capitalizeFirstLetter(table.getName())).append("Entity[] = []; \n");
-        sb.append("     navigationSubscription?: Subscription;\n\n");
-        // get all
+        // Class declaration
         sb.append("""
-                 ngOnInit() {
+        export class %sComponent implements OnInit, OnDestroy {
+            %sService = inject(%sService);
+            router = inject(Router);
+            %sEntity?: %sEntity[] = [];
+            navigationSubscription?: Subscription;
+
+            ngOnInit() {
+                this.loadData();
+                this.navigationSubscription = this.router.events.subscribe((event) => {
+                    if (event instanceof NavigationEnd) {
                         this.loadData();
-                        this.navigationSubscription = this.router.events.subscribe((event) => {
-                            if (event instanceof NavigationEnd) {
-                                this.loadData();
-                            }
-                        });
                     }
-            """);
+                });
+            }
 
-        sb.append("\n\n\n");
+            loadData() {
+                this.%sService.getAll%s().subscribe({
+                    next: (data) => (this.%sEntity = data),
+                    error: (error) => console.log(error),
+                });
+            }
 
-        sb.append("     loadData() {\n");
-        sb.append("         this."+MyHelpper.lowerCaseFirstLetter(table.getName())).append("Service.getAll").append(MyHelpper.capitalizeFirstLetter(table.getName()))
-            .append("().subscribe({\n");
-        sb.append("""
-                                next: (data) => (this.%sEntity = data),
-                  """.formatted(MyHelpper.lowerCaseFirstLetter(table.getName())));
-        sb.append("""
-                                error: (error) => console.log(error),
-                  """);
-        sb.append("""
-                    });
-                }
-            \n""");
-
-        sb.append("""
-                ngOnDestroy() {
-                    this.navigationSubscription!.unsubscribe();
-                }
-            """);
-
-        sb.append("}\n");
+            ngOnDestroy() {
+                this.navigationSubscription?.unsubscribe();
+            }
+        }
+        """.formatted(
+                capitalizedTableName,
+                lowerCaseTableName, capitalizedTableName,
+                lowerCaseTableName, capitalizedTableName,
+                lowerCaseTableName, capitalizedTableName, lowerCaseTableName
+            )
+        );
 
         return sb.toString();
     }
+
 
     @Override
     public String generateAngularComponentsHtml(CustomTable table, Long projectId) {

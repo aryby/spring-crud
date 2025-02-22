@@ -1,12 +1,31 @@
 package io.aryby.spring_boot_crud.generator.frontend.implimentations;
 
+import io.aryby.spring_boot_crud.custom_table.CustomTableDTO;
+import io.aryby.spring_boot_crud.custom_table.CustomTableService;
 import io.aryby.spring_boot_crud.generator.frontend.IAngularAppModuleTs;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class IAngularAppModuleTsImpl implements IAngularAppModuleTs {
+
+    private final CustomTableService customTableService;
+
+    public IAngularAppModuleTsImpl(CustomTableService customTableService) {
+        this.customTableService = customTableService;
+    }
+
     @Override
     public String generateAngularAppModuleTs(Long projectId) {
+        List<CustomTableDTO> allEntities = customTableService.findAllByProjectSetting(projectId);
+
+        List<String> components = new ArrayList<>();
+        allEntities.forEach(entity -> {
+            components.add(entity.getName());
+        });
+
         StringBuilder sb = new StringBuilder();
         sb.append("""
             // generated from generateAngularAppModuleTs
@@ -49,6 +68,7 @@ public class IAngularAppModuleTsImpl implements IAngularAppModuleTs {
             import { FooterComponent } from './layouts/footer';
             import { SidebarComponent } from './layouts/sidebar';
             import { ThemeCustomizerComponent } from './layouts/theme-customizer';
+            import { MvcModule } from './mvc/mvc.module';
 
             @NgModule({
                 imports: [
@@ -67,6 +87,7 @@ public class IAngularAppModuleTsImpl implements IAngularAppModuleTs {
                     }),
                     StoreModule.forRoot({ index: indexReducer }),
                     SharedModule.forRoot(),
+                    MvcModule,
                 ],
                 declarations: [
                     AppComponent,\s

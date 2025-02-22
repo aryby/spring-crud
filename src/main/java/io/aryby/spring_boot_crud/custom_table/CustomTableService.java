@@ -46,6 +46,12 @@ private  final Logger logger = LoggerFactory.getLogger(this.getClass());
                 .map(customTable -> mapToDTO(customTable, new CustomTableDTO()))
                 .toList();
     }
+    public List<CustomTableDTO> findAllByProjectSetting(Long projectSettingId) {
+        final List<CustomTable> customTables = customTableRepository.findAllByprojectSetting(projectSettingId);
+        return customTables.stream()
+            .map(customTable -> mapToDTO(customTable, new CustomTableDTO()))
+            .toList();
+    }
 
     public CustomTableDTO get(final Long id) {
         return customTableRepository.findById(id)
