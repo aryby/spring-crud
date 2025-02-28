@@ -9,20 +9,16 @@ public class IAngularAppModuleRoutingTsImpl implements IAngularAppModuleRoutingT
     public String generateAngularAppModuleTs(Long projectId) {
         StringBuilder sb = new StringBuilder();
         sb.append("""
-            // src/app/app-routing.module.ts
             import { NgModule } from '@angular/core';
             import { RouterModule, Routes } from '@angular/router';
-            import { AppComponent } from './app.component';
 
-            const routes: Routes = [
-              { path: '', component: AppComponent }, // Default route
-            ];
+            const routes: Routes = [];
 
             @NgModule({
               imports: [RouterModule.forRoot(routes)],
               exports: [RouterModule]
             })
-            export class AppRoutingModule {}
+            export class AppRoutingModule { }
 
 
             """);

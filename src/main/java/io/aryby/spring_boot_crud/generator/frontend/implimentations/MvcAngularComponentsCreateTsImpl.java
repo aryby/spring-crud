@@ -2,29 +2,28 @@ package io.aryby.spring_boot_crud.generator.frontend.implimentations;
 
 import io.aryby.spring_boot_crud.custom_table.CustomTable;
 import io.aryby.spring_boot_crud.custom_table_attributes.CustomTableAttributeService;
-import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.frontend.IAngularComponentsGenerator;
-import io.aryby.spring_boot_crud.generator.frontend.IAngularServiceGenerator;
+import io.aryby.spring_boot_crud.generator.frontend.IMvcComponentCreateTs;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
 import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerator {
+public class MvcAngularComponentsCreateTsImpl implements IMvcComponentCreateTs {
     private final ProjectSettingsRepository projectSettingsRepository;
     private final GeneralSettingsRepository generalSettingsRepository;
     private final CustomTableAttributeService customTableAttributeService;
 
-    public AngularComponentsGeneratorImpl(ProjectSettingsRepository projectSettingsRepository, GeneralSettingsRepository generalSettingsRepository, CustomTableAttributeService customTableAttributeService) {
+    public MvcAngularComponentsCreateTsImpl(ProjectSettingsRepository projectSettingsRepository, GeneralSettingsRepository generalSettingsRepository, CustomTableAttributeService customTableAttributeService) {
         this.projectSettingsRepository = projectSettingsRepository;
         this.generalSettingsRepository = generalSettingsRepository;
         this.customTableAttributeService = customTableAttributeService;
     }
 
     @Override
-    public String generateAngularComponentsTs(CustomTable table, Long projectId) {
+    public String generate(CustomTable table, Long projectId) {
         // Fetch Project and General Settings
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
             .orElseThrow(() -> new IllegalArgumentException("ProjectSettings not found for ID: " + projectId));
@@ -63,13 +62,13 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
         // Class declaration
         sb.append("""
         export class %sComponent implements OnInit, OnDestroy {
+
             %sService = inject(%sService);
             router = inject(Router);
             %sEntity?: %sEntity[] = [];
             navigationSubscription?: Subscription;
 
             ngOnInit() {
-                this.loadData();
                 this.navigationSubscription = this.router.events.subscribe((event) => {
                     if (event instanceof NavigationEnd) {
                         this.loadData();
@@ -77,8 +76,8 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
                 });
             }
 
-            loadData() {
-                this.%sService.getAll%s().subscribe({
+            create(data:any) {
+                this.%sService.create%s(data).subscribe({
                     next: (data) => (this.%sEntity = data),
                     error: (error) => console.log(error),
                 });
@@ -103,9 +102,4 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
         return sb.toString();
     }
 
-
-    @Override
-    public String generateAngularComponentsHtml(CustomTable table, Long projectId) {
-        return "<h1>Angular Components</h1>\n";
-    }
 }

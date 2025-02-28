@@ -7,8 +7,6 @@ import io.aryby.spring_boot_crud.developer_preferences.DeveloperPreferencesRepos
 import io.aryby.spring_boot_crud.general_settings.GeneralSettings;
 import io.aryby.spring_boot_crud.general_settings.GeneralSettingsRepository;
 import io.aryby.spring_boot_crud.generator.IGenerateZip;
-import io.aryby.spring_boot_crud.generator.implimentations.IGenerateBackendZipImpl;
-import io.aryby.spring_boot_crud.generator.implimentations.IGenerateFrontendZipImpl;
 import io.aryby.spring_boot_crud.util.CustomCollectors;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

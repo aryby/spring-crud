@@ -9,7 +9,6 @@ import io.aryby.spring_boot_crud.generator.frontend.*;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingService;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettings;
 import io.aryby.spring_boot_crud.project_settings.ProjectSettingsRepository;
-import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,7 @@ import static io.aryby.spring_boot_crud.util.MyHelpper.zipDirectory;
 
 @Service
 public class IGenerateFrontendZipImpl implements IGenerateZip {
+
     private Logger logger = LoggerFactory.getLogger(ProjectSettingService.class);
     private final ProjectSettingsRepository projectSettingRepository;
     private final GeneralSettingsRepository generalSettingsRepository;
@@ -41,13 +41,14 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
 
     private final IMvcModule mvcModule;
     private final IMvcRoutes mvcRoutes;
+    private final IMvcComponentList mvcComponentList;
 
     public IGenerateFrontendZipImpl(ProjectSettingsRepository projectSettingRepository,
                                     GeneralSettingsRepository generalSettingsRepository,
                                     CustomTableRepository customTableRepository,
                                     IAngularAppModuleTs angularAppModule,
                                     IAngularAppComponent angularAppComponent,
-                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IAngularComponentsGenerator angularComponentsGenerator, IModelGenerator modelGenerator, IMvcModule mvcModule, IMvcRoutes mvcRoutes) {
+                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IAngularComponentsGenerator angularComponentsGenerator, IModelGenerator modelGenerator, IMvcModule mvcModule, IMvcRoutes mvcRoutes, IMvcComponentList mvcComponentList) {
         this.projectSettingRepository = projectSettingRepository;
         this.generalSettingsRepository = generalSettingsRepository;
         this.customTableRepository = customTableRepository;
@@ -59,6 +60,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         this.modelGenerator = modelGenerator;
         this.mvcModule = mvcModule;
         this.mvcRoutes = mvcRoutes;
+        this.mvcComponentList = mvcComponentList;
     }
 
     @Override
@@ -104,6 +106,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         zipOut.putNextEntry(MODULE_PATH_MVC);
         zipOut.write(MODUL_MVC.getBytes());
         zipOut.closeEntry();
+
         // generate mvc Routes
         String ROUTES_MVC = mvcRoutes.generate(projectId);
         logger.info("generate MVC ROUTES APP");
@@ -124,7 +127,7 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
 
         // generate list html component
         for (CustomTable table : tables) {
-           String listComponentHtml  = angularComponentsGenerator.generateAngularComponentsHtml(table, projectId);
+           String listComponentHtml  = mvcComponentList.generate(table, projectId);
             ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-list.component.html");
 
             zipOut.putNextEntry(entryhtml);

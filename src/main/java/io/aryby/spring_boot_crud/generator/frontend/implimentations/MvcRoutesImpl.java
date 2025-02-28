@@ -31,42 +31,31 @@ public class MvcRoutesImpl implements IMvcRoutes {
         // Base imports
         sb.append("""
         import { Routes } from '@angular/router';
-        import { AppLayout } from '../layouts/app-layout';
-        import { AuthLayout } from '../layouts/auth-layout';
+
         """);
 
         // Dynamically import components
         components.forEach(component -> {
             String formattedName = component.replace("Component", "").toLowerCase();
-            sb.append(String.format("import { %s } from '../components/%s/%s.component';\n", component, formattedName, formattedName));
+            sb.append(String.format("import { %s } from './components/%s/%s.component';\n", component, formattedName, formattedName));
         });
 
         // Define routes
         sb.append("""
 
         export const mvcRoute: Routes = [
-            {
-                path: '',
-                component: AppLayout,
-                children: [
+
         """);
 
         // Add routes for each component dynamically
         components.forEach(component -> {
             String pathName = component.replace("Component", "").toLowerCase();
-            sb.append(String.format("                    { path: '%s', component: %s, data: { title: '%s' } },\n",
+            sb.append(String.format("          { path: '%s', component: %s, data: { title: '%s' } },\n",
                 pathName, component, MyHelpper.capitalizeFirstLetter(pathName)));
         });
 
         // Close AppLayout and AuthLayout routes
         sb.append("""
-                ],
-            },
-            {
-                path: '',
-                component: AuthLayout,
-                children: [],
-            },
         ];
         """);
 

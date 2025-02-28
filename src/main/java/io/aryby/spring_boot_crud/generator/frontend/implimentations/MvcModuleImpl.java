@@ -23,7 +23,9 @@ public class MvcModuleImpl implements IMvcModule {
 
         // Collect all component names
         List<String> components = new ArrayList<>();
+        List<String> services = new ArrayList<>();
         allEntities.forEach(entity -> components.add(MyHelpper.capitalizeFirstLetter(entity.getName()) + "Component"));
+        allEntities.forEach(entity -> services.add(MyHelpper.capitalizeFirstLetter(entity.getName()) + "Service"));
 
         // Start building the module
         StringBuilder sb = new StringBuilder();
@@ -31,9 +33,16 @@ public class MvcModuleImpl implements IMvcModule {
         import { NgModule } from '@angular/core';
         import { CommonModule } from '@angular/common';
         import { RouterModule } from '@angular/router';
-        import { mvcRoute } from './mvc.route';
+        import { HttpClientModule } from '@angular/common/http';
+        import { mvcRoute } from './mvc.routes';
+
         """);
 
+        // Dynamically import services
+        services.forEach(service -> {
+            String formattedName = service.replace("Service", "").toLowerCase();
+            sb.append(String.format("import { %s } from './services/%s.service';\n", formattedName, formattedName));
+        });
         // Dynamically import components
         components.forEach(component -> {
             String formattedName = component.replace("Component", "").toLowerCase();
@@ -55,7 +64,13 @@ public class MvcModuleImpl implements IMvcModule {
           imports: [
               RouterModule.forRoot(mvcRoute, { scrollPositionRestoration: 'enabled' }),
               CommonModule,
-          ]
+              HttpClientModule,
+          ],
+              providers: [
+          """);
+        services.forEach(service -> sb.append("    ").append(service).append(",\n"));
+        sb.append("""
+        ]
         })
         export class MvcModule { }
         """);

@@ -4,7 +4,7 @@ public interface IRessourcesGenerator {
 
     default String generateRessources(){
         return "" +
-            "server.port=8090\n"+
+            "server.port=9090\n"+
             "spring.datasource.url=${JDBC_DATABASE_URL\\:jdbc\\:mysql\\://localhost\\:3306/spring-generator?serverTimezone\\=UTC}\n" +
             "spring.datasource.username=${JDBC_DATABASE_USERNAME\\:root}\n" +
             "spring.datasource.password=${JDBC_DATABASE_PASSWORD\\:root}\n" +
