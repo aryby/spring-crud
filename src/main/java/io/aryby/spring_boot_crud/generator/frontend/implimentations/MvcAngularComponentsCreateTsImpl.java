@@ -24,82 +24,67 @@ public class MvcAngularComponentsCreateTsImpl implements IMvcComponentCreateTs {
 
     @Override
     public String generate(CustomTable table, Long projectId) {
-        // Fetch Project and General Settings
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
             .orElseThrow(() -> new IllegalArgumentException("ProjectSettings not found for ID: " + projectId));
 
         generalSettingsRepository.findById(projectSetting.getGeneralSettings())
             .orElseThrow(() -> new IllegalArgumentException("GeneralSettings not found for ProjectSettings ID: " + projectId));
 
-        // Prepare formatted names
         String tableName = table.getName();
         String formattedTableName = tableName.toLowerCase();
         String capitalizedTableName = MyHelpper.capitalizeFirstLetter(tableName);
         String lowerCaseTableName = MyHelpper.lowerCaseFirstLetter(tableName);
 
-        // Generate component content
         StringBuilder sb = new StringBuilder();
 
-        // Import statements
+        // ✅ 1. Import statements
         sb.append("""
-        import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-        import { NavigationEnd, Router } from '@angular/router';
-        import { Subscription } from 'rxjs';
+    import { Component, inject, OnInit } from '@angular/core';
+    import { Router } from '@angular/router';
+    import { %sEntity } from '../../models/%s.entity';
+    import { %sService } from '../../services/%s.service';
+    """.formatted(capitalizedTableName, formattedTableName, capitalizedTableName, formattedTableName));
 
-        import { %sEntity } from '../../models/%s.entity';
-        import { %sService } from '../../services/%s.service';
-        """.formatted(capitalizedTableName, formattedTableName, capitalizedTableName, formattedTableName));
-
-        // Component decorator
+        // ✅ 2. Component decorator
         sb.append("""
-        @Component({
-            selector: 'app-%s-list',
-            templateUrl: './%s-list.component.html',
-            standalone: false,
-        })
-        """.formatted(formattedTableName, formattedTableName));
+    @Component({
+        selector: 'app-%s-add',
+        templateUrl: './%s-add.component.html',
+        standalone: false,
+    })
+    """.formatted(formattedTableName, formattedTableName));
 
-        // Class declaration
+        // ✅ 3. Class declaration with model
         sb.append("""
-        export class %sComponent implements OnInit, OnDestroy {
+    export class %sAddComponent implements OnInit {
 
-            %sService = inject(%sService);
-            router = inject(Router);
-            %sEntity?: %sEntity[] = [];
-            navigationSubscription?: Subscription;
+        %sService = inject(%sService);
+        router = inject(Router);
 
-            ngOnInit() {
-                this.navigationSubscription = this.router.events.subscribe((event) => {
-                    if (event instanceof NavigationEnd) {
-                        this.loadData();
-                    }
-                });
-            }
+        %s: %sEntity={ }; // 🟢 model مرتبط بـ ngModel
 
-            create(data:any) {
-                this.%sService.create%s(data).subscribe({
-                    next: (data) => (this.%sEntity = data),
-                    error: (error) => console.log(error),
-                });
-            }
+        ngOnInit() { }
 
-            confirmDelete(id:any){
-                console.log(id);
-            }
-
-            ngOnDestroy() {
-                this.navigationSubscription?.unsubscribe();
-            }
+        create() {
+            this.%sService.create%s(this.%s).subscribe({
+                next: (data) => {
+                    console.log('Created:', data);
+                    this.router.navigate(['/%s']); // ✅ توجيه بعد الحفظ
+                },
+                error: (error) => console.error(error),
+            });
         }
-        """.formatted(
-                capitalizedTableName,
-                lowerCaseTableName, capitalizedTableName,
-                lowerCaseTableName, capitalizedTableName,
-                lowerCaseTableName, capitalizedTableName, lowerCaseTableName
-            )
-        );
+    }
+    """.formatted(
+            capitalizedTableName,
+            lowerCaseTableName, capitalizedTableName,
+            lowerCaseTableName, capitalizedTableName, capitalizedTableName,
+            lowerCaseTableName, capitalizedTableName, lowerCaseTableName,
+            formattedTableName
+        ));
 
         return sb.toString();
     }
+
 
 }

@@ -21,43 +21,58 @@ public class MvcRoutesImpl implements IMvcRoutes {
     public String generate(Long projectId) {
         List<CustomTableDTO> allEntities = customTableService.findAllByProjectSetting(projectId);
 
-        // Collect all component names
         List<String> components = new ArrayList<>();
-        allEntities.forEach(entity -> components.add(MyHelpper.capitalizeFirstLetter(entity.getName()) + "Component"));
+        allEntities.forEach(entity -> {
+            components.add(MyHelpper.capitalizeFirstLetter(entity.getName()) + "ListComponent");
+            components.add(MyHelpper.capitalizeFirstLetter(entity.getName()) + "AddComponent");
+        });
 
-        // Start building the routes file
         StringBuilder sb = new StringBuilder();
 
         // Base imports
         sb.append("""
-        import { Routes } from '@angular/router';
+                import { Routes } from '@angular/router';
 
-        """);
+                """);
 
         // Dynamically import components
-        components.forEach(component -> {
-            String formattedName = component.replace("Component", "").toLowerCase();
-            sb.append(String.format("import { %s } from './components/%s/%s.component';\n", component, formattedName, formattedName));
+        allEntities.forEach(entity -> {
+            String formattedName = entity.getName().toLowerCase();
+            sb.append(String.format("import { %sListComponent } from './components/%s/%s-list.component';\n",
+                MyHelpper.capitalizeFirstLetter(formattedName),
+                formattedName,
+                formattedName));
+            sb.append(String.format("import { %sAddComponent } from './components/%s/%s-add.component';\n",
+                MyHelpper.capitalizeFirstLetter(formattedName),
+                formattedName,
+                formattedName));
         });
 
         // Define routes
         sb.append("""
 
-        export const mvcRoute: Routes = [
+    export const mvcRoute: Routes = [
+    """);
 
-        """);
-
-        // Add routes for each component dynamically
-        components.forEach(component -> {
-            String pathName = component.replace("Component", "").toLowerCase();
-            sb.append(String.format("          { path: '%s', component: %s, data: { title: '%s' } },\n",
-                pathName, component, MyHelpper.capitalizeFirstLetter(pathName)));
+        // Add routes for each entity dynamically
+        allEntities.forEach(entity -> {
+            String pathName = entity.getName().toLowerCase();
+            sb.append(String.format("""
+              { path: '%s', children: [
+                  { path: '', component: %sListComponent, data: { title: '%s' } },
+                  { path: 'add', component: %sAddComponent, data: { title: 'Ajouter %s' } }
+              ] },
+        """,
+                pathName,
+                MyHelpper.capitalizeFirstLetter(pathName),
+                MyHelpper.capitalizeFirstLetter(pathName),
+                MyHelpper.capitalizeFirstLetter(pathName),
+                MyHelpper.capitalizeFirstLetter(pathName)));
         });
 
-        // Close AppLayout and AuthLayout routes
         sb.append("""
-        ];
-        """);
+    ];
+    """);
 
         return sb.toString();
     }

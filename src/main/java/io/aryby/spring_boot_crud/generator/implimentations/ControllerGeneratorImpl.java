@@ -75,7 +75,9 @@ public class ControllerGeneratorImpl implements IControllerGenerator {
             import org.springframework.http.ResponseEntity;
             import org.springframework.web.bind.annotation.*;
 
+
             @RestController
+            @CrossOrigin(value = "*")
             """)
             .append("@RequestMapping(value = \"/api/")
             .append(entityName.toLowerCase()).append("s\")\n");

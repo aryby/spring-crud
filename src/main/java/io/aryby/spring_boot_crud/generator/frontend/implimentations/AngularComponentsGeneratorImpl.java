@@ -62,7 +62,7 @@ public class AngularComponentsGeneratorImpl implements IAngularComponentsGenerat
 
         // Class declaration
         sb.append("""
-        export class %sComponent implements OnInit, OnDestroy {
+        export class %sListComponent implements OnInit, OnDestroy {
             %sService = inject(%sService);
             router = inject(Router);
             %sEntity?: %sEntity[] = [];

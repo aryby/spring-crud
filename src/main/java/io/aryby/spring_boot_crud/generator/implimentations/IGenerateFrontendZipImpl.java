@@ -42,13 +42,15 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
     private final IMvcModule mvcModule;
     private final IMvcRoutes mvcRoutes;
     private final IMvcComponentList mvcComponentList;
+    private final IMvcComponentCreate mvcComponentCreateHtml;
+    private final IMvcComponentCreateTs mvcComponentCreateTs;
 
     public IGenerateFrontendZipImpl(ProjectSettingsRepository projectSettingRepository,
                                     GeneralSettingsRepository generalSettingsRepository,
                                     CustomTableRepository customTableRepository,
                                     IAngularAppModuleTs angularAppModule,
                                     IAngularAppComponent angularAppComponent,
-                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IAngularComponentsGenerator angularComponentsGenerator, IModelGenerator modelGenerator, IMvcModule mvcModule, IMvcRoutes mvcRoutes, IMvcComponentList mvcComponentList) {
+                                    IAngularAppModuleRoutingTs appModuleRoutingTs, IAngularServiceGenerator angularServiceGenerator, IAngularComponentsGenerator angularComponentsGenerator, IModelGenerator modelGenerator, IMvcModule mvcModule, IMvcRoutes mvcRoutes, IMvcComponentList mvcComponentList, IMvcComponentCreate mvcComponentCreateHtml, IMvcComponentCreateTs mvcComponentCreateTs) {
         this.projectSettingRepository = projectSettingRepository;
         this.generalSettingsRepository = generalSettingsRepository;
         this.customTableRepository = customTableRepository;
@@ -61,6 +63,8 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         this.mvcModule = mvcModule;
         this.mvcRoutes = mvcRoutes;
         this.mvcComponentList = mvcComponentList;
+        this.mvcComponentCreateHtml = mvcComponentCreateHtml;
+        this.mvcComponentCreateTs = mvcComponentCreateTs;
     }
 
     @Override
@@ -118,7 +122,8 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         // generate list ts component
         for (CustomTable table : tables) {
             String listComponentTs  = angularComponentsGenerator.generateAngularComponentsTs(table, projectId);
-            ZipEntry entry = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + ".component.ts");
+            ZipEntry entry = new ZipEntry(angularSrcAppMvc + "components/" +
+                table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-list.component.ts");
 
             zipOut.putNextEntry(entry);
             zipOut.write(listComponentTs.getBytes());
@@ -128,10 +133,33 @@ public class IGenerateFrontendZipImpl implements IGenerateZip {
         // generate list html component
         for (CustomTable table : tables) {
            String listComponentHtml  = mvcComponentList.generate(table, projectId);
-            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" + table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-list.component.html");
+            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" +
+                table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-list.component.html");
 
             zipOut.putNextEntry(entryhtml);
             zipOut.write(listComponentHtml.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // generate Add html component
+        for (CustomTable table : tables) {
+            String addComponentHtml  = mvcComponentCreateHtml.generate(table, projectId);
+            ZipEntry entryhtml = new ZipEntry(angularSrcAppMvc + "components/" +
+                table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-add.component.html");
+
+            zipOut.putNextEntry(entryhtml);
+            zipOut.write(addComponentHtml.getBytes());
+            zipOut.closeEntry();
+        }
+
+        // generate Add ts component
+        for (CustomTable table : tables) {
+            String addComponentTs  = mvcComponentCreateTs.generate(table, projectId);
+            ZipEntry entry = new ZipEntry(angularSrcAppMvc + "components/" +
+                table.getName().toLowerCase() +"/"+ table.getName().toLowerCase() + "-add.component.ts");
+
+            zipOut.putNextEntry(entry);
+            zipOut.write(addComponentTs.getBytes());
             zipOut.closeEntry();
         }
 

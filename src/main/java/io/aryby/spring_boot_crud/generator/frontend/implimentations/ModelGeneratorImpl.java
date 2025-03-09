@@ -12,6 +12,7 @@ import io.aryby.spring_boot_crud.util.MyHelpper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ModelGeneratorImpl implements IModelGenerator {
@@ -42,6 +43,9 @@ public class ModelGeneratorImpl implements IModelGenerator {
 
         StringBuilder attributesBuilder = new StringBuilder();
         for (CustomTableAttributeDTO attr : attributes) {
+            if (Objects.equals(attr.getNameTypeModifier().toLowerCase(), "integer")){
+                attr.setNameTypeModifier("number");
+            }
             attributesBuilder.append("    ")
                 .append(attr.getNameAttribute())
                 .append("?: ")

@@ -37,7 +37,7 @@ public class AngularServiceGeneratorImpl implements IAngularServiceGenerator {
 
         String entityName = MyHelpper.capitalizeFirstLetter(table.getName());
         String entityVar = MyHelpper.lowerCaseFirstLetter(table.getName());
-        String apiUrl = "environment.apiPath + '/api/" + entityName + "s'";
+        String apiUrl = "environment.apiPath + '/api/" + entityVar + "s'";
 
         return String.format("""
         import { Injectable, inject } from '@angular/core';

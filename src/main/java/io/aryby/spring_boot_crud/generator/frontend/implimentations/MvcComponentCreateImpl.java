@@ -30,7 +30,6 @@ public class MvcComponentCreateImpl implements IMvcComponentCreate {
 
     @Override
     public String generate(CustomTable table, Long projectId) {
-
         logger.info("Generate Angular Create Component for: " + table.getName());
 
         ProjectSettings projectSetting = projectSettingsRepository.findById(projectId)
@@ -44,28 +43,37 @@ public class MvcComponentCreateImpl implements IMvcComponentCreate {
 
         StringBuilder sb = new StringBuilder();
 
-        // Angular Template for List Component
+        // ✅ 1. إضافة النموذج مع ngSubmit
         sb.append(String.format("""
+    <div class="p-4 bg-white shadow rounded">
+        <h2 class="text-2xl font-bold mb-4">Ajouter %1$s</h2>
 
-        <div class="overflow-x-auto">
-            <h2 class="text-2xl font-bold mb-4">%1$s + </h2>
-            <form>
-        """, lowerEntityName));
+        <form (ngSubmit)="create()" #form="ngForm">
+    """, entityName));
 
-        // Generate dynamic table headers
+        // ✅ 2. إنشاء الحقول باستخدام ngModel
         attributes.forEach(attr -> sb.append(String.format("""
-                <input type="text" name="%s"></input>
+            <div class="mb-3">
+                <label class="block text-sm font-medium text-gray-700">%1$s</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded" name="%2$s"
+                    [(ngModel)]="%3$s.%2$s" required />
+            </div>
+    """,
+            MyHelpper.capitalizeFirstLetter(attr.getNameAttribute()),
+            attr.getNameAttribute(),
+            lowerEntityName
+        )));
 
-        """, MyHelpper.capitalizeFirstLetter(attr.getNameAttribute()))));
-
-        // Add Edit and Delete Actions
+        // ✅ 3. إضافة زر الحفظ
         sb.append("""
-            </form>
-        </div>
-        """);
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+        </form>
+    </div>
+    """);
 
         return sb.toString();
     }
+
 
 
 
